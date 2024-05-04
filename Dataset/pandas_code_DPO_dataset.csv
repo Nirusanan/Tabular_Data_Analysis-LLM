@@ -1,0 +1,630 @@
+Dataset Name,Columns with Sample Data,Question,Error Code,Corrected Code
+airline,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",Passenger names who are aged between 30 to 60?,"```
+def process(df):
+    # Convert the 'Age' column to a numeric type
+    df['Age'] = df['Age'].str.replace(',', '').astype(float)
+
+    # Define the start and end of the desired age range
+    start_age = 30
+    end_age = 60
+
+    # Filter the dataframe for passengers within the desired age range
+    filtered_passengers = df[(df['Age'] >= start_age) & (df['Age'] <= end_age)]
+
+    return filtered_passengers[['Passenger ID', 'First Name', 'Last Name', 'Age']]
+```","```
+def process(df):
+    # Filter for passengers aged between 30 to 60
+    age_filtered_passengers = df[(df['Age'] >= 30) & (df['Age'] <= 60)]
+
+    # Select the names of these passengers
+    passenger_names = age_filtered_passengers[['First Name', 'Last Name']]
+
+    return passenger_names
+```"
+airline,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",Which country have more than five airports?,"```
+def process(df):
+    # Set the preferred country in a variable
+    preferred_country = 'Canada'
+
+    # Filter the dataframe for rows based on the preferred country
+    # and the condition of having more than 5 airports
+    preferred_country_airports = df[(df['Country Name'] == preferred_country) & (df['Airports'] > 5)]
+
+    # Check if any rows meet the criteria
+    if preferred_country_airports.empty:
+        return f""The country '{preferred_country}' does not meet the criteria.""
+    else:
+        # Return a message with the name of the preferred country and the number of airports
+        return f""The country '{preferred_country}' has more than 5 airports.""
+```","```
+def process(df):
+    # Count the number of unique airports in each country
+    airport_count_by_country = df.groupby('Country Name')['Airport Name'].nunique()
+
+    # Filter countries with more than five airports
+    countries_with_more_airports = airport_count_by_country[airport_count_by_country > 5]
+
+    # Check if any country has more than five airports
+    if countries_with_more_airports.empty:
+        return ""No country in the dataset has more than five airports.""
+    else:
+        return countries_with_more_airports
+```"
+airline,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",Last two month how many flights were delayed?,"```
+def process(df):
+    # Convert the 'Departure Date' column to a datetime format
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+    
+    # Use pandas's 'dt.normalize' function to normalize the month and day to a common format
+    normalized_month_and_day = df['Departure Date'].dt.normalize()
+    
+    # Use pandas's 'dt.to_period' function to convert the normalized month and day to a period
+    month_and_day_period = df['Departure Date'].dt.to_period(normalized_month_and_day)
+    
+    # Group by the'month_and_day_period' and count the number of delayed flights
+    delayed_flights_per_month = df[df['Flight Status'] == 'Delayed'].groupby(month_and_day_period)['Passenger ID'].count()
+    
+    # Filter for the last two months
+    last_two_months = month_and_day_period.max() - pd.Timedelta(days=60)  # 60 days for 2 months
+    delayed_flights_last_two_months = delayed_flights_per_month[last_two_months:month_and_day_period.max()]
+    
+    return delayed_flights_last_two_months.sum()
+```","```
+def process(df):
+    from datetime import datetime
+    
+    # Convert 'Departure Date' to datetime
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+
+    # Get the current date (assuming today's date for this example)
+    current_date = datetime.now()
+
+    # Calculate the date two months ago from the current date
+    two_months_ago = current_date - pd.DateOffset(months=2)
+
+    # Filter for flights in the last two months
+    recent_flights = df[df['Departure Date'] >= two_months_ago]
+
+    # Count the number of delayed flights
+    delayed_flights_count = recent_flights[recent_flights['Flight Status'] == 'Delayed'].shape[0]
+
+    # Return a proper message
+    if delayed_flights_count == 0:
+        return ""There were no delayed flights in the last two months.""
+    else:
+        return f""There were {delayed_flights_count} delayed flights in the last two months.""
+```"
+airline,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",in US airport 2022/1/1 how many passengers arrived?,"```
+def process(df):
+    # Convert the 'Departure Date' column to a datetime format
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+    
+    # Check if '2022/1/1' is a valid date
+    if '/' not in '2022/1/1':
+        valid_date = '2022-01-01'  # Using a hyphen since '/' is not a valid character for a date in Python
+    else:
+        valid_date = '2022/01/01'  # Using a slash since '/' is a valid character for a date in Python
+    
+    # Filter the dataframe for entries where the 'Departure Date' is '2022/1/1'
+    # Since '/' is not a valid character for a date in Python, we're using '2022-01-01' instead
+    # However, if '/' is a valid character for a date in your data, you can use '2022/01/01' instead
+    # 
+    # Since '2022/1/1' is not a valid date in Python, we're using '2022-01-01' instead
+    # However, if '2022/1/1' is a valid date in your data, you can use it directly
+    # 
+    # Since '2022-01-01' is a valid date in Python, we're using it directly
+    # However, if '2022-01-01' is not a valid date in your data, you can use '2022/01/01' instead
+    # 
+    # Since '2022/01/01' is a valid date in Python, we're using it directly
+    # However, if '202
+```","```
+def process(df):
+    from datetime import datetime
+    
+    # Convert 'Departure Date' to datetime
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+
+    # Define the target date and country
+    target_date = datetime(2022, 1, 1)
+    target_country = 'United States'
+
+    # Filter for passengers arriving at US airports on January 1, 2022
+    arrivals_on_target_date = df[(df['Departure Date'] == target_date) & (df['Country Name'] == target_country)]
+
+    # Count the number of passengers
+    passenger_count = arrivals_on_target_date.shape[0]
+
+    # Return a proper message
+    if passenger_count == 0:
+        return ""No passengers arrived at US airports on January 1, 2022.""
+    else:
+        return f""{passenger_count} passengers arrived at US airports on January 1, 2022.""
+```"
+outlet,"data = {
+    'Item_Identifier': ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    'Item_Weight': [9.3, 5.92, 17.5, 19.2, 8.93],
+    'Item_Fat_Content': ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    'Item_Visibility': [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    'Item_Type': ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    'Item_MRP': [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    'Outlet_Identifier': ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    'Outlet_Establishment_Year': [1999, 2009, 1999, 1998, 1987],
+    'Outlet_Size': ['Medium', 'Medium', 'Medium', nan, 'High'],
+    'Outlet_Location_Type': ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    'Outlet_Type': ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    'Item_Outlet_Sales': [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",What are the unique item types are there?,"```
+def process(df):
+    # Set the preferred item type as a variable
+    preferred_item_type = 'Fruits and Vegetables'
+    
+    # Filter the dataframe for rows based on the preferred item type
+    preferred_items = df[df['Item_Type'] == preferred_item_type]
+    
+    # Check if there are any rows for the preferred item type
+    if preferred_items.empty:
+        return f""The preferred item type '{preferred_item_type}' was not found in the dataset.""
+    
+    # Group by 'Item_Type' and count the occurrences
+    item_types = df['Item_Type'].value_counts()
+    
+    # Filter the count for the preferred item type
+    preferred_count = item_types[preferred_item_type]
+    
+    # Construct a message with the count of the preferred item type
+    message = f""The preferred item type '{preferred_item_type}' is found {preferred_count} times in the dataset.""
+    
+    return message
+```","```
+def process(df):
+    # Get unique item types
+    unique_item_types = df['Item_Type'].unique()
+
+    # Check if there are unique item types
+    if len(unique_item_types) == 0:
+        return ""There are no item types in the dataset.""
+    else:
+        return f""The unique item types in the dataset are: {', '.join(unique_item_types)}.""
+```"
+outlet,"data = {
+    'Item_Identifier': ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    'Item_Weight': [9.3, 5.92, 17.5, 19.2, 8.93],
+    'Item_Fat_Content': ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    'Item_Visibility': [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    'Item_Type': ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    'Item_MRP': [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    'Outlet_Identifier': ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    'Outlet_Establishment_Year': [1999, 2009, 1999, 1998, 1987],
+    'Outlet_Size': ['Medium', 'Medium', 'Medium', nan, 'High'],
+    'Outlet_Location_Type': ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    'Outlet_Type': ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    'Item_Outlet_Sales': [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",in medium outlet how much sales happened?,"```
+def process(df):
+    # Filter the dataframe for rows where Item_Type is 'Dairy' and Outlet_Location_Type is 'Tier 1'
+    dairy_in_tier_1_outlets = df[(df['Item_Type'] == 'Dairy') & (df['Outlet_Location_Type'] == 'Tier 1')]
+
+    # Sum the Item_Outlet_Sales for the filtered rows
+    total_sales_dairy_tier_1_outlets = dairy_in_tier_1_outlets['Item_Outlet_Sales'].sum()
+
+    return f""The total sales of dairy products in Tier 1 outlets is ${total_sales_dairy_tier_1_outlets}.""
+```","```
+def process(df):
+    # Filter for medium-sized outlets
+    medium_outlets = df[df['Outlet_Size'] == 'Medium']
+
+    # Sum up the Item_Outlet_Sales for these outlets
+    total_sales_medium_outlets = medium_outlets['Item_Outlet_Sales'].sum()
+
+    # Return a proper message
+    if total_sales_medium_outlets == 0:
+        return ""No sales occurred in medium-sized outlets.""
+    else:
+        return f""The total sales in medium-sized outlets amounted to {total_sales_medium_outlets}.""
+```"
+outlet,"data = {
+    'Item_Identifier': ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    'Item_Weight': [9.3, 5.92, 17.5, 19.2, 8.93],
+    'Item_Fat_Content': ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    'Item_Visibility': [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    'Item_Type': ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    'Item_MRP': [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    'Outlet_Identifier': ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    'Outlet_Establishment_Year': [1999, 2009, 1999, 1998, 1987],
+    'Outlet_Size': ['Medium', 'Medium', 'Medium', nan, 'High'],
+    'Outlet_Location_Type': ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    'Outlet_Type': ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    'Item_Outlet_Sales': [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",Total item outlet sales?,"```
+def process(df):
+    # Group by 'Item_Identifier' and sum the 'Item_Outlet_Sales'
+    total_sales_per_item = df.groupby('Item_Identifier')['Item_Outlet_Sales'].sum()
+
+    # Return the total sales for each item
+    return total_sales_per_item
+```","```
+def process(df):
+    # Sum up the Item_Outlet_Sales for all items
+    total_item_outlet_sales = df['Item_Outlet_Sales'].sum()
+
+    # Return a proper message
+    if total_item_outlet_sales == 0:
+        return ""No item outlet sales have occurred.""
+    else:
+        return f""The total item outlet sales amounted to {total_item_outlet_sales}.""
+```"
+outlet,"data = {
+    'Item_Identifier': ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    'Item_Weight': [9.3, 5.92, 17.5, 19.2, 8.93],
+    'Item_Fat_Content': ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    'Item_Visibility': [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    'Item_Type': ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    'Item_MRP': [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    'Outlet_Identifier': ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    'Outlet_Establishment_Year': [1999, 2009, 1999, 1998, 1987],
+    'Outlet_Size': ['Medium', 'Medium', 'Medium', nan, 'High'],
+    'Outlet_Location_Type': ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    'Outlet_Type': ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    'Item_Outlet_Sales': [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",Top 5 item types has high visibility?,"```
+def process(df):
+    # Group by 'Item_Type' and sum 'Item_Outlet_Sales'
+    sales_by_type = df.groupby('Item_Type')['Item_Outlet_Sales'].sum()
+
+    # Sort in descending order and get the top 5
+    top_5_types = sales_by_type.sort_values(ascending=False).head(5)
+
+    return top_5_types
+```","```
+def process(df):
+    # Group by 'Item_Type' and calculate the average 'Item_Visibility'
+    avg_visibility_by_item_type = df.groupby('Item_Type')['Item_Visibility'].mean()
+
+    # Sort the averages in descending order and get the top 5
+    top_5_visible_item_types = avg_visibility_by_item_type.sort_values(ascending=False).head(5)
+
+    return  top_5_visible_item_types
+```"
+course,"data = {
+    'course_id': [1070968, 1113822, 1006314, 1210588, 1011058],
+    'course_title': ['Ultimate Investment Banking Course', 'Complete GST Course & Certification - Grow Your CA Practice', 'Financial Modeling for Business Analysts and Consultants', 'Beginner to Pro - Financial Analysis in Excel 2017', 'How To Maximize Your Profits Trading Options'],
+    'url': ['https://www.udemy.com/ultimate-investment-banking-course/', 'https://www.udemy.com/goods-and-services-tax/', 'https://www.udemy.com/financial-modeling-for-business-analysts-and-consultants/', 'https://www.udemy.com/complete-excel-finance-course-from-beginner-to-pro/', 'https://www.udemy.com/how-to-maximize-your-profits-trading-options/'],
+    'is_paid': [True, True, True, True, True],
+    'price': [200, 75, 45, 95, 200],
+    'num_subscribers': [2147, 2792, 2174, 2451, 1276],
+    'num_reviews': [23, 923, 74, 11, 45],
+    'num_lectures': [51, 274, 51, 36, 26],
+    'level': ['All Levels', 'All Levels', 'Intermediate Level', 'All Levels', 'Intermediate Level'],
+    'content_duration': [1.5, 39.0, 2.5, 3.0, 2.0],
+    'published_timestamp': ['2017-01-18T20:58:58Z', '2017-03-09T16:34:20Z', '2016-12-19T19:26:30Z', '2017-05-30T20:07:24Z', '2016-12-13T14:57:18Z'],
+    'subject': ['Business Finance', 'Business Finance', 'Business Finance', 'Business Finance', 'Business Finance'],
+}",top 5 courses have more students registered?,"```
+def process(df):
+    # Group by course_title and count the number of students in each group
+    student_counts = df.groupby('course_title')['num_subscribers'].sum()
+
+    # Sort the counts in descending order and get the top 5 courses
+    top_5_courses = student_counts.sort_values(ascending=False).head(5)
+
+    return top_5_courses
+```","```
+def process(df):
+    # Group by course_title and count the number of students in each group
+    student_counts = df.groupby('course_title')['num_subscribers'].sum()
+
+    # Sort the counts in descending order and get the top 5 courses
+    top_courses = student_counts.sort_values(ascending=False).head(5)
+
+    # Select the required columns
+    top_courses_subset = top_courses[['course_id', 'course_title', 'num_subscribers']]
+
+    return top_courses_subset
+```"
+course,"data = {
+    'course_id': [1070968, 1113822, 1006314, 1210588, 1011058],
+    'course_title': ['Ultimate Investment Banking Course', 'Complete GST Course & Certification - Grow Your CA Practice', 'Financial Modeling for Business Analysts and Consultants', 'Beginner to Pro - Financial Analysis in Excel 2017', 'How To Maximize Your Profits Trading Options'],
+    'url': ['https://www.udemy.com/ultimate-investment-banking-course/', 'https://www.udemy.com/goods-and-services-tax/', 'https://www.udemy.com/financial-modeling-for-business-analysts-and-consultants/', 'https://www.udemy.com/complete-excel-finance-course-from-beginner-to-pro/', 'https://www.udemy.com/how-to-maximize-your-profits-trading-options/'],
+    'is_paid': [True, True, True, True, True],
+    'price': [200, 75, 45, 95, 200],
+    'num_subscribers': [2147, 2792, 2174, 2451, 1276],
+    'num_reviews': [23, 923, 74, 11, 45],
+    'num_lectures': [51, 274, 51, 36, 26],
+    'level': ['All Levels', 'All Levels', 'Intermediate Level', 'All Levels', 'Intermediate Level'],
+    'content_duration': [1.5, 39.0, 2.5, 3.0, 2.0],
+    'published_timestamp': ['2017-01-18T20:58:58Z', '2017-03-09T16:34:20Z', '2016-12-19T19:26:30Z', '2017-05-30T20:07:24Z', '2016-12-13T14:57:18Z'],
+    'subject': ['Business Finance', 'Business Finance', 'Business Finance', 'Business Finance', 'Business Finance'],
+}",top 5 courses has high price?,"```
+def process(df):
+    # Filter for courses with a high price
+    high_price_courses = df[df['price'] >= 150]
+
+    # Sort the filtered courses by price in descending order
+    sorted_high_price_courses = high_price_courses.sort_values(by='price', ascending=False)
+
+    # Select the top 5 courses with high prices
+    top_5_high_price_courses = sorted_high_price_courses.head(5)
+
+    return top_5_high_price_courses[['course_id', 'course_title', 'price']]
+```","```
+def process(df):
+    # Sort the DataFrame by 'price' in descending order
+    top_priced_courses = df.sort_values(by='price', ascending=False).head(5)
+
+    # Select the relevant columns for the output
+    top_priced_courses_subset = top_priced_courses[['course_id', 'course_title', 'price']]
+
+    return top_priced_courses_subset
+```"
+flights,"data = {
+    'Customer': ['BU79786', 'QZ44356', 'AI49188', 'WW63253', 'HB64268'],
+    'State': ['Washington', 'Arizona', 'Nevada', 'California', 'Washington'],
+    'Customer Lifetime Value': [2763.519279, 6979.535903, 12887.43165, 7645.861827, 2813.692575],
+    'Response': ['No', 'No', 'No', 'No', 'No'],
+    'Coverage': ['Basic', 'Extended', 'Premium', 'Basic', 'Basic'],
+    'Education': ['Bachelor', 'Bachelor', 'Bachelor', 'Bachelor', 'Bachelor'],
+    'Effective To Date': ['2/24/11', '1/31/11', '2/19/11', '1/20/11', '2/3/11'],
+    'EmploymentStatus': ['Employed', 'Unemployed', 'Employed', 'Unemployed', 'Employed'],
+    'Gender': ['F', 'F', 'F', 'M', 'M'],
+    'Income': [56274, 0, 48767, 0, 43836],
+    'Location Code': ['Suburban', 'Suburban', 'Suburban', 'Suburban', 'Rural'],
+    'Marital Status': ['Married', 'Single', 'Married', 'Married', 'Single'],
+    'Monthly Premium Auto': [69, 94, 108, 106, 73],
+    'Months Since Last Claim': [32, 13, 18, 18, 12],
+    'Months Since Policy Inception': [5, 42, 38, 65, 44],
+    'Number of Open Complaints': [0, 0, 0, 0, 0],
+    'Number of Policies': [1, 8, 2, 7, 1],
+    'Policy Type': ['Corporate Auto', 'Personal Auto', 'Personal Auto', 'Corporate Auto', 'Personal Auto'],
+    'Policy': ['Corporate L3', 'Personal L3', 'Personal L3', 'Corporate L2', 'Personal L1'],
+    'Renew Offer Type': ['Offer1', 'Offer3', 'Offer1', 'Offer1', 'Offer1'],
+    'Sales Channel': ['Agent', 'Agent', 'Agent', 'Call Center', 'Agent'],
+    'Total Claim Amount': [384.811147, 1131.464935, 566.472247, 529.881344, 138.130879],
+    'Vehicle Class': ['Two-Door Car', 'Four-Door Car', 'Two-Door Car', 'SUV', 'Four-Door Car'],
+    'Vehicle Size': ['Medsize', 'Medsize', 'Medsize', 'Medsize', 'Medsize'],
+}",effective date between 2011-04-01 to 2011-05-01 how many customers are there?,"```
+def process(df):
+    # Convert the 'Effective To Date' column to a datetime format
+    df['Effective To Date'] = pd.to_datetime(df['Effective To Date'], format='%m/%d/%y')
+    
+    # Define the start and end dates for the given range
+    start_date = pd.Timestamp('2011-04-01')
+    end_date = pd.Timestamp('2011-05-01')
+    
+    # Filter the dataframe for rows within the given date range
+```","```
+def process(df):
+    from datetime import datetime
+    
+    # Convert 'Effective To Date' to datetime
+    df['Effective To Date'] = pd.to_datetime(df['Effective To Date'], format='%m/%d/%y')
+
+    # Define the start and end dates for the filter
+    start_date = datetime(2011, 4, 1)
+    end_date = datetime(2011, 5, 1)
+
+    # Filter for customers with policies effective between the start and end dates
+    effective_customers = df[(df['Effective To Date'] >= start_date) & (df['Effective To Date'] < end_date)]
+
+    # Count the number of customers in the filtered dataset
+    num_customers = effective_customers.shape[0]
+
+    # Return a proper message
+    if num_customers == 0:
+        return ""There were no customers with policies effective between April 1, 2011, and May 1, 2011.""
+    else:
+        return f""There were {num_customers} customers with policies effective between April 1, 2011, and May 1, 2011.""
+```"
+airlines,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",Which country have more than five airports?,"```
+def process(df):
+    # Convert the 'Departure Date' column to a datetime format
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+
+    # Check if there are any rows with more than five airports in the 'Country Name' column
+    if df['Country Name'].str.count('Airport').gt(5).any():
+        # Filter the dataframe for rows with more than five airports in the 'Country Name' column
+        filtered_df = df[df['Country Name'].str.count('Airport') > 5]
+
+        # List of countries with more than five airports
+        countries = filtered_df['Country Name'].tolist()
+
+        # Return the list of countries
+        return countries
+    else:
+        # If no countries have more than five airports, return an appropriate message
+        return ""All countries have five or fewer airports.""
+```","```
+def process(df):
+    # Count the number of unique airports in each country
+    airport_count_by_country = df.groupby('Country Name')['Airport Name'].nunique()
+
+    # Filter countries with more than five airports
+    countries_with_more_airports = airport_count_by_country[airport_count_by_country > 5]
+
+    # Check if any country has more than five airports and return a proper message
+    if countries_with_more_airports.empty:
+        return ""No country in the dataset has more than five airports.""
+    else:
+        return f""Countries with more than five airports: {', '.join(countries_with_more_airports.index)}.""
+```"
+airlines,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",Last two month how many flights were delayed?,"```
+def process(df):
+    # Convert the 'Departure Date' column to a datetime format
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+
+    # Define the start of the last month
+    last_month_start = pd.Timestamp.now().normalize() - pd.tseries.offsets.MonthEnd()
+
+    # Filter the data for the last month
+    last_month_data = df[(df['Departure Date'] >= last_month_start) & (df['Departure Date'] < last_month_start + pd.tseries.offsets.MonthEnd())]
+
+    # Count the delayed flights
+    delayed_count = last_month_data[last_month_data['Flight Status'] == 'Delayed'].shape[0]
+
+    return f""{delayed_count} flights were delayed in the last month.""
+```","```
+def process(df):
+    from datetime import datetime
+    
+    # Convert 'Departure Date' to datetime
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+
+    # Get the current date (assuming today's date for this example)
+    current_date = datetime.now()
+
+    # Calculate the date two months ago from the current date
+    two_months_ago = current_date - pd.DateOffset(months=2)
+
+    # Filter for flights in the last two months
+    recent_flights = df[df['Departure Date'] >= two_months_ago]
+
+    # Count the number of delayed flights
+    delayed_flights_count = recent_flights[recent_flights['Flight Status'] == 'Delayed'].shape[0]
+
+    # Return a proper message
+    if delayed_flights_count == 0:
+        return ""There were no delayed flights in the last two months.""
+    else:
+        return f""There were {delayed_flights_count} delayed flights in the last two months.""
+```"
+airlines,"data = {
+    'Passenger ID': [10856, 43872, 42633, 78493, 82072],
+    'First Name': ['Edithe', 'Elwood', 'Darby', 'Dominica', 'Bay'],
+    'Last Name': ['Leggis', 'Catt', 'Felgate', 'Pyle', 'Pencost'],
+    'Gender': ['Female', 'Male', 'Male', 'Female', 'Male'],
+    'Age': [62, 62, 67, 71, 21],
+    'Nationality': ['Japan', 'Nicaragua', 'Russia', 'China', 'China'],
+    'Airport Name': ['Coldfoot Airport', 'Kugluktuk Airport', 'Grenoble-Isère Airport', 'Ottawa / Gatineau Airport', 'Gillespie Field'],
+    'Airport Country Code': ['US', 'CA', 'FR', 'CA', 'US'],
+    'Country Name': ['United States', 'Canada', 'France', 'Canada', 'United States'],
+    'Airport Continent': ['NAM', 'NAM', 'EU', 'NAM', 'NAM'],
+    'Continents': ['North America', 'North America', 'Europe', 'North America', 'North America'],
+    'Departure Date': ['6/28/2022', '12/26/2022', '1/18/2022', '9/16/2022', '2/25/2022'],
+    'Arrival Airport': ['CXF', 'YCO', 'GNB', 'YND', 'SEE'],
+    'Pilot Name': ['Edithe Leggis', 'Elwood Catt', 'Darby Felgate', 'Dominica Pyle', 'Bay Pencost'],
+    'Flight Status': ['On Time', 'On Time', 'On Time', 'Delayed', 'On Time'],
+}",Age between 25-30 japan nationality how many male customers traveled?,"```
+def process(df):
+    # Convert the date columns to datetime format
+    df['Departure Date'] = pd.to_datetime(df['Departure Date'], format='%m/%d/%Y')
+    df['Arrival Date'] = pd.to_datetime(df['Arrival Date'], format='%m/%d/%Y')
+
+    # Filter for rows based on the criteria in the instruction
+    filtered_df = df[(df['Age'] >= 25) & (df['Age'] <= 30) & (df['Nationality'] == 'Japan') & (df['Gender'] == 'Male') & (df['Flight Status'] == 'Delayed')]
+
+    # Count the number of rows in the filtered dataframe
+    num_customers = filtered_df.shape[0]
+
+    return f""There are {num_customers} male customers between the ages of 25 and 30 who are from Japan and had a delayed flight.""
+```","```
+def process(df):
+    # Filter for male customers with Japanese nationality aged between 25 and 30
+    filtered_customers = df[(df['Gender'] == 'Male') & 
+                            (df['Nationality'] == 'Japan') & 
+                            (df['Age'] >= 25) & 
+                            (df['Age'] <= 30)]
+
+    # Count the number of such customers
+    num_customers = filtered_customers.shape[0]
+
+    # Return a proper message
+    if num_customers == 0:
+        return ""There were no male Japanese customers aged between 25 and 30 who traveled.""
+    else:
+        return f""There were {num_customers} male Japanese customers aged between 25 and 30 who traveled.""
+```"

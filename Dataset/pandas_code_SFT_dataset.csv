@@ -1,0 +1,1488 @@
+Dataset Name,Columns with Sample Data,Question,Expected Code
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How many unique customers are there?,"```
+def process(df):
+    # Count the unique customer codes
+    unique_customers = df['customer_code'].nunique()
+
+    # Format the result into a string message
+    message = f""There are {unique_customers} unique customers.""
+
+    return message
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Who are the top five customers based on total purchase value?,"```
+def process(df):
+    # Group by customer_name and sum the total_amount
+    sales_per_customer = df.groupby('customer_name')['total_amount'].sum()
+
+    # Sort in descending order and take the top 5
+    top_5_customers = sales_per_customer.sort_values(ascending=False).head(5)
+
+    return top_5_customers
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Show the five products offering the highest discounts?,"```
+def process(df):
+    # Calculate the discount amount for each product in each transaction
+    df['discount_amount'] = df['total_amount'] * df['discount']
+
+    # Group by 'item_name' and sum the discount amounts
+    product_discounts = df.groupby('item_name')['discount_amount'].sum()
+
+    # Sort the discounts in descending order and select the top 5 products
+    top_5_products = product_discounts.sort_values(ascending=False).head(5)
+
+    return top_5_products
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",List the top 5 months with the highest total sales amounts?,"```
+def process(df):
+    # Convert the 'invoice_date' column to a datetime type
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+
+    # Extract month and year from the 'invoice_date'
+    df['month_year'] = df['invoice_date'].dt.to_period('M')
+
+    # Group by 'month_year' and sum the total sales
+    monthly_sales = df.groupby('month_year')['total_amount'].sum()
+
+    # Sort the sales in descending order and select the top 5 months
+    top_5_months = monthly_sales.sort_values(ascending=False).head(5)
+
+    # Construct a result message
+    result = "", "".join([f""{month}: ${amount:.2f}"" for month, amount in top_5_months.items()])
+    return f""Top 5 months with highest sales are: {result}""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",What was the total sales amount for customer C005 in the last week?,"```
+def process(df):
+    import datetime
+
+    # Get the current date
+    today = datetime.date.today()
+
+    # Calculate start and end date for last week
+    end_date_last_week = today - datetime.timedelta(days=today.weekday() + 1)
+    start_date_last_week = end_date_last_week - datetime.timedelta(days=6)
+
+    # Filter data for customer C005 and the date range for last week
+    customer_sales = df[(df['customer_code'] == 'C005') &
+                        (df['invoice_date'] >= start_date_last_week.strftime('%Y-%m-%d')) &
+                        (df['invoice_date'] <= end_date_last_week.strftime('%Y-%m-%d'))]
+
+    # Check if the customer is not in the list
+    if customer_sales.empty:
+        return ""Customer C005 was not found in the sales data for the last week.""
+
+    # Sum up the total_amount for the filtered data
+    total_sales_last_week = customer_sales['total_amount'].sum()
+
+    return f""Customer C005 made a total of ${total_sales_last_week} in sales during the last week.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",how many M gender of customers are there?,"```
+def process(df):
+    # Assuming the gender 'Male' is represented in the data differently (e.g., 'Male', 'male', 'Man', etc.)
+    # Let's consider 'Male' for this example
+    
+    # Filtering the dataframe to only include rows where gender is 'Male'
+    # Then using nunique() to get the number of unique male customers
+    male_customers = df[df['gender'] == 'Male']['customer_code'].nunique()
+    
+    # If 'M' is not used in the data, and the gender representation is different, 
+    # the filter condition will be adjusted accordingly.
+    
+    return f""There are {male_customers} male customers.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",What is the total amount spent by customer John in all sales?,"```
+def process(df):
+    customer_name = 'John'
+
+    # Check if the customer exists in the dataset
+    if customer_name in df['customer_name'].values:
+        # Sum up the total amount spent by the customer
+        total_spent = df[df['customer_name'] == customer_name]['total_amount'].sum()
+        return f""Customer {customer_name} has spent ${total_spent} in total.""
+    else:
+        # If the customer doesn't exist, return the following message
+        return f""No customers like {customer_name}.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",What was customer C001 total sales figure for the past six months?,"```
+def process(df):
+    import datetime
+
+    # Preferred customer code for processing
+    customer_code = 'C001'
+
+    # Get the current date
+    today = datetime.date.today()
+
+    # Calculate the start date for 6 months ago
+    start_date_six_months_ago = today - datetime.timedelta(days=6*30)  # Assuming an average of 30 days per month
+
+    # Filter data for the preferred customer code and the date range for the last 6 months
+    customer_sales = df[(df['customer_code'] == customer_code) &
+                        (df['invoice_date'] >= start_date_six_months_ago.strftime('%Y-%m-%d')) &
+                        (df['invoice_date'] <= today.strftime('%Y-%m-%d'))]
+
+    # Check if the customer is not in the list
+    if customer_sales.empty:
+        return f""Customer {customer_code} was not found in the sales data for the last 6 months.""
+
+    # Sum up the total_amount for the filtered data
+    total_sales_six_months = customer_sales['total_amount'].sum()
+
+    return f""Customer {customer_code} made a total of ${total_sales_six_months} in sales during the last 6 months.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How much in total sales has customer S101 accumulated over the last 6 months?,"```
+def process(df):
+    import datetime
+
+    # Preferred customer code for processing
+    customer_code = 'S101'
+
+    # Get the current date
+    today = datetime.date.today()
+
+    # Calculate the start date for 6 months ago
+    start_date_six_months_ago = today - datetime.timedelta(days=6*30)  # Assuming an average of 30 days per month
+
+    # Filter data for the preferred customer code and the date range for the last 6 months
+    customer_sales = df[(df['customer_code'] == customer_code) &
+                        (df['invoice_date'] >= start_date_six_months_ago.strftime('%Y-%m-%d')) &
+                        (df['invoice_date'] <= today.strftime('%Y-%m-%d'))]
+
+    # Check if the customer is not in the list
+    if customer_sales.empty:
+        return f""Customer {customer_code} was not found in the sales data for the last 6 months.""
+
+    # Sum up the total_amount for the filtered data
+    total_sales_six_months = customer_sales['total_amount'].sum()
+
+    return f""Customer {customer_code} made a total of ${total_sales_six_months} in sales during the last 6 months.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How much the total tax collected in the current year?,"```
+def process(df):
+    import datetime
+    
+    # Convert the 'invoice_date' column to datetime format
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+    
+    # Dynamically determine the current year based on today's date
+    current_year = datetime.datetime.now().year
+    
+    # Filter the DataFrame for entries within the current year
+    current_year_data = df[df['invoice_date'].dt.year == current_year]
+    
+    # Calculate the total tax collected
+    total_tax = current_year_data['tax'].sum()
+    
+    return f""The total tax collected in the current year is ${total_tax}.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How many invoices were generated in the last quarter?,"```
+def process(df):
+    # Convert the 'invoice_date' column to datetime format
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+    
+    # Get the current date
+    today = pd.Timestamp.now().normalize()
+    
+    # Compute the end of the last quarter
+    end_of_last_quarter = today - pd.tseries.offsets.DateOffset(days=today.day)
+
+    # Determine the start of the last quarter based on the end date
+    start_of_last_quarter = end_of_last_quarter - pd.tseries.offsets.QuarterEnd()
+
+    # Filter the DataFrame for entries within the last quarter
+    last_quarter_data = df[(df['invoice_date'] >= start_of_last_quarter) & (df['invoice_date'] <= end_of_last_quarter)]
+    
+    # Count unique invoice dates
+    unique_invoices = last_quarter_data['invoice_date'].nunique()
+    
+    return f""{unique_invoices} invoices made in the last quarter.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How many invoices were generated in the last year last quarter?,"```
+def process(df):
+    # Convert the 'invoice_date' column to datetime format
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+    
+    # Get the current date
+    today = pd.Timestamp.now().normalize()
+
+    # Compute the end of the last year
+    end_of_last_year = pd.Timestamp(today.year - 1, 12, 31)
+
+    # Compute the start of the last quarter of the last year
+    start_of_last_quarter_last_year = pd.Timestamp(today.year - 1, 10, 1)
+
+    # Filter the DataFrame for entries within the last quarter of the last year
+    last_quarter_last_year_data = df[(df['invoice_date'] >= start_of_last_quarter_last_year) & (df['invoice_date'] <= end_of_last_year)]
+    
+    # Count unique invoice dates
+    unique_invoices = last_quarter_last_year_data['invoice_date'].nunique()
+    
+    return f""{unique_invoices} invoices made in the last quarter of the previous year.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}","Which product had the highest total expenditure by customer FA101, and how much was it?","```
+def process(df):
+    # Preferred customer code for processing
+    customer_code = 'FA101'
+    
+    # Filter data for the preferred customer code
+    customer_data = df[df['customer_code'] == customer_code]
+
+    # If no records are found for the customer, return a message
+    if customer_data.empty:
+        return f""Customer {customer_code} was not found in the sales data.""
+
+    # Group by item_code and sum the total_amount
+    total_spent_per_item = customer_data.groupby('item_code')['total_amount'].sum()
+
+    # Identify the item with the highest total_amount
+    max_spent_item = total_spent_per_item.idxmax()
+    max_spent_amount = total_spent_per_item.max()
+
+    return f""Customer {customer_code} spent the most money on item {max_spent_item}, with a total of ${max_spent_amount}.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How many unique items were sold last week?,"```
+def process(df):
+    # Convert the 'invoice_date' column to datetime format
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+    
+    # Dynamically determine the last week based on today's date
+    today = pd.Timestamp.now().normalize()  # Use pd.Timestamp for compatibility with pandas
+    end_date = today - pd.Timedelta(days=1)  # Yesterday
+    start_date = end_date - pd.Timedelta(days=6)  # 7 days including end_date
+    
+    # Filter the DataFrame for entries within the last week
+    last_week_data = df[(df['invoice_date'] >= start_date) & (df['invoice_date'] <= end_date)]
+    
+    # Get the number of unique items sold
+    unique_items = last_week_data['item_code'].nunique()
+    
+    return f""There are {unique_items} unique items sold in the last week.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",how many male customers are there?,"```
+def process(df):
+    # Count the number of unique male customers
+    male_customers = df[df['gender'] == 'Male']['customer_code'].nunique()
+    
+    # Return the result with a descriptive text
+    return f""Number of unique male customers: {male_customers}""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How many units of each item were sold each month? ,"```
+def process(df):
+    # Convert the invoice_date column to a datetime type
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+
+    # Extract month and year from the invoice_date
+    df['month_year'] = df['invoice_date'].dt.to_period('M')
+
+    # Group by month_year and item_code, then sum the quantity
+    monthly_sales = df.groupby(['month_year', 'item_code'])['quantity'].sum().reset_index()
+
+    # Format the result for better clarity
+    result = monthly_sales.pivot(index='month_year', columns='item_code', values='quantity').fillna(0)
+
+    return result
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Show the total spending in usd across all purchases?,"```
+def process(df):
+    # Filter data by the USD currency
+    usd_sales = df[df['currency'] == 'USD']
+
+    # Sum the total_amount column for USD transactions
+    total_purchase_usd = usd_sales['total_amount'].sum()
+
+    return f""The total amount spent in USD on purchases is ${total_purchase_usd}.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Which customer received the highest total discount in the last month?,"```
+def process(df):
+    # Convert the 'invoice_date' column to a datetime type
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+    
+    # Check if 'unit_price' is a string and then convert to float
+    if df['unit_price'].dtype == 'object':
+        df['unit_price'] = df['unit_price'].str.replace('$', '').astype(float)
+
+    # Define the start and end of the last month
+    last_month_end = df['invoice_date'].max().replace(day=1) - pd.Timedelta(days=1)
+    last_month_start = last_month_end.replace(day=1)
+
+    # Filter the data for the last month
+    last_month_data = df[(df['invoice_date'] >= last_month_start) & (df['invoice_date'] <= last_month_end)]
+
+    # Check if there are any entries for the last month
+    if last_month_data.empty:
+        return ""No invoices were generated in the last month.""
+
+    # Calculate the discount amount
+    last_month_data['discount_amount'] = last_month_data['total_amount'] * last_month_data['discount']
+
+    # Group by 'customer_name' and sum the discount amounts
+    customer_discounts = last_month_data.groupby('customer_name')['discount_amount'].sum()
+
+    # Identify the customer with the maximum discount amount
+    max_discount_customer = customer_discounts.idxmax()
+    max_discount_amount = customer_discounts.max()
+
+    return f""The customer {max_discount_customer} received the highest discount of ${max_discount_amount:.2f} in the last month.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Count the occurrences of $ in this sales data?,"```
+def process(df):
+    # While the actual symbol '$' is not in the 'currency' column, it typically denotes USD. Thus, we're using 'USD' for the count.
+    usd_count = df[df['currency'] == 'USD'].shape[0]
+    return f""The currency type '$' (USD) is used {usd_count} times in the sales.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Which item has the highest discount?,"```
+def process(df):
+    # Find the row with the highest discount
+    max_discount_row = df[df['discount'] == df['discount'].max()].iloc[0]
+
+    # Return the item with the highest discount
+    return f""The item '{max_discount_row['item_name']}' has the highest discount applied with a rate of {max_discount_row['discount']*100}%.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",How much did customer A101 spend in sales last month?,"```
+def process(df):
+    # Set preferred customer
+    preferred_customer = 'A101'
+
+    # Convert 'invoice_date' to a datetime object
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+    
+    # Use pandas's DateOffset to get the first day of the current month
+    first_day_of_current_month = df['invoice_date'].max().replace(day=1)
+    
+    # Calculate the range for the last month using pandas's DateOffset
+    last_month_start = first_day_of_current_month - pd.DateOffset(months=1)
+    last_month_end = first_day_of_current_month - pd.DateOffset(days=1)
+    
+    # Filter data to only include sales from the last month
+    last_month_sales = df[(df['invoice_date'] >= last_month_start) & (df['invoice_date'] <= last_month_end)]
+    
+    # Check if the preferred customer is present in the data
+    if preferred_customer not in df['customer_code'].values:
+        return f""There is no customer with the code {preferred_customer}.""
+    
+    # Sum the total sales for the preferred customer
+    total_sales_for_preferred = last_month_sales[last_month_sales['customer_code'] == preferred_customer]['total_amount'].sum()
+    
+    # Check if there were any sales for the preferred customer in the last month
+    if total_sales_for_preferred == 0:
+        return f""There were no sales for customer {preferred_customer} in the last month.""
+    else:
+        return f""Customer {preferred_customer} had total sales of ${total_sales_for_preferred} in the last month.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",What is the total sales amount generated by customer SJ175?,"```
+def process(df):
+    # Check if the customer ""SJ175"" exists in the DataFrame
+    if ""SJ175"" not in df['customer_code'].values:
+        return ""The customer SJ175 does not exist in the dataset.""
+
+    # Filter the DataFrame for entries where customer_code is ""SJ175""
+    customer_sales = df[df['customer_code'] == ""SJ175""]['total_amount'].sum()
+    
+    return f""The customer SJ175 has spent {customer_sales} in total on sales.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Identify the top 5 customers based on the quantity of purchases made?,"```
+def process(df):    
+    # Group by customer_code and count the number of occurrences
+    customer_counts = df.groupby('customer_code').size().reset_index(name='number_of_purchases')
+    
+    # Sort the counts in descending order and get the top 5
+    top_5_customers = customer_counts.sort_values(by='number_of_purchases', ascending=False).head(5)
+    
+    return top_5_customers
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",What is the average price of widget A sold in the last year?,"```
+def process(df):
+    # Convert the 'invoice_date' column to datetime format
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+
+    # Determine the start of the last year
+    last_year_start = pd.Timestamp.now().normalize().replace(year=pd.Timestamp.now().year - 1, month=1, day=1)
+
+    # Filter the DataFrame for ""Widget A"" sold in the last year
+    widget_a_sales = df[(df['item_name'] == ""Widget A"") & (df['invoice_date'] >= last_year_start)]
+
+    # Check if there are any sales of ""Widget A"" in the last year
+    if widget_a_sales.empty:
+        return ""No sales of Widget A in the last year.""
+
+    # Calculate the average price
+    average_price = widget_a_sales['unit_price'].mean()
+
+    return f""The average price of Widget A sold in the last year is ${average_price:.2f}.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}",Which item was purchased the most in March 2023?,"```
+def process(df):
+    # Convert the 'invoice_date' column to datetime format
+    df['invoice_date'] = pd.to_datetime(df['invoice_date'])
+
+    # Define the start and end of March 2023
+    start_of_march = pd.Timestamp('2023-03-01')
+    end_of_march = pd.Timestamp('2023-03-31')
+
+    # Filter the DataFrame for entries from March 2023
+    march_sales = df[(df['invoice_date'] >= start_of_march) & (df['invoice_date'] <= end_of_march)]
+
+    # Check if there are any sales in March 2023
+    if march_sales.empty:
+        return ""No sales data for March 2023.""
+
+    # Group by 'item_name' and sum the quantities
+    item_sales = march_sales.groupby('item_name')['quantity'].sum()
+
+    # Identify the item with the highest total quantity
+    most_purchased = item_sales.idxmax()
+    most_purchased_quantity = item_sales.max()
+
+    return f""The most purchased item in March 2023 was {most_purchased} with a total quantity of {most_purchased_quantity}.""
+```"
+sales,"data = {
+    ""invoice_date"": [""2023-09-01"", ""2023-09-02"", ""2023-09-03"", ""2023-09-04"", ""2023-09-05""],
+    ""customer_code"": [""C001"", ""C005"", ""C001"", ""C003"", ""C004""],
+    ""customer_name"": [""Alice"", ""Bob"", ""Alice"", ""Charlie"", ""David""],
+    ""gender"": [""Male"", ""Female"", ""Male"", ""Female"", ""Male""],
+    ""item_code"": [""I001"", ""I002"", ""I003"", ""I004"", ""I005""],
+    ""item_name"": [""Widget A"", ""Widget B"", ""Widget C"", ""Widget D"", ""Widget E""],
+    ""unit_price"": [10, 20, 30, 40, 50],
+    ""quantity"": [1, 2, 3, 1, 5],
+    ""total_amount"": [10, 40, 90, 40, 250],
+    ""tax"": [1, 4, 9, 4, 25],
+    ""currency"": [""USD"", ""USD"", ""USD"", ""USD"", ""USD""],
+    ""discount"": [0, 0, 0.05, 0, 0.1],
+    ""total_discount_after"": [10, 40, 85.5, 40, 225]
+}","How much total tax has been collected from customer ""Alice"" across all her purchases?","```
+def process(df):
+    # Filter the DataFrame for entries where customer_name is ""Alice""
+    alice_sales = df[df['customer_name'] == ""Alice""]
+
+    # Check if there are any sales for ""Alice""
+    if alice_sales.empty:
+        return ""No sales data for customer Alice.""
+
+    # Sum the tax column to get total tax collected from Alice
+    total_tax = alice_sales['tax'].sum()
+
+    return f""The total tax collected from customer Alice is ${total_tax:.2f}.""
+```"
+outlet,"data = {
+    ""Item_Identifier"": ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    ""Item_Weight"": [9.3, 5.92, 17.5, 19.2, 8.93],
+    ""Item_Fat_Content"": ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    ""Item_Visibility"": [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    ""Item_Type"": ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    ""Item_MRP"": [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    ""Outlet_Identifier"": ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    ""Outlet_Establishment_Year"": [1999, 2009, 1999, 1998, 1987],
+    ""Outlet_Size"": ['Medium', 'Medium', 'Medium', nan, 'High'],
+    ""Outlet_Location_Type"": ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    ""Outlet_Type"": ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    ""Item_Outlet_Sales"": [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",How many soft drinks are available in Tier 1 locations?,"```
+def process(df):
+    # Set the preferred item type and outlet location type as variables
+    preferred_item_type = 'Soft Drinks'
+    preferred_location_type = 'Tier 1'
+
+    # Filter the dataframe for rows based on the preferred item type and outlet location type
+    count = df[(df['Item_Type'] == preferred_item_type) & (df['Outlet_Location_Type'] == preferred_location_type)].shape[0]
+
+    return f""There are {count} {preferred_item_type.lower()} items in {preferred_location_type} locations.""
+```"
+outlet,"data = {
+    ""Item_Identifier"": ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    ""Item_Weight"": [9.3, 5.92, 17.5, 19.2, 8.93],
+    ""Item_Fat_Content"": ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    ""Item_Visibility"": [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    ""Item_Type"": ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    ""Item_MRP"": [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    ""Outlet_Identifier"": ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    ""Outlet_Establishment_Year"": [1999, 2009, 1999, 1998, 1987],
+    ""Outlet_Size"": ['Medium', 'Medium', 'Medium', nan, 'High'],
+    ""Outlet_Location_Type"": ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    ""Outlet_Type"": ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    ""Item_Outlet_Sales"": [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",How many items are categorized as low fat?,"```
+def process(df):
+    # Set the preferred fat content as a variable
+    preferred_fat_content = 'Low Fat'
+    
+    # Filtering the DataFrame for rows based on the preferred fat content and then using 'shape' to get the count
+    count = df[df['Item_Fat_Content'] == preferred_fat_content].shape[0]
+
+    # Check if the count is zero
+    if count == 0:
+        return f""The term '{preferred_fat_content}' was not found in the records.""
+    else:
+        return f""There are {count} items that contain '{preferred_fat_content}'.""
+```"
+outlet,"data = {
+    ""Item_Identifier"": ['FDA15', 'DRC01', 'FDN15', 'FDX07', 'NCD19'],
+    ""Item_Weight"": [9.3, 5.92, 17.5, 19.2, 8.93],
+    ""Item_Fat_Content"": ['Low Fat', 'Regular', 'Low Fat', 'Regular', 'Low Fat'],
+    ""Item_Visibility"": [0.016047301, 0.019278216, 0.016760075, 0.0, 0.0],
+    ""Item_Type"": ['Dairy', 'Soft Drinks', 'Meat', 'Fruits and Vegetables', 'Household'],
+    ""Item_MRP"": [249.8092, 48.2692, 141.618, 182.095, 53.8614],
+    ""Outlet_Identifier"": ['OUT049', 'OUT018', 'OUT049', 'OUT010', 'OUT013'],
+    ""Outlet_Establishment_Year"": [1999, 2009, 1999, 1998, 1987],
+    ""Outlet_Size"": ['Medium', 'Medium', 'Medium', nan, 'High'],
+    ""Outlet_Location_Type"": ['Tier 1', 'Tier 3', 'Tier 1', 'Tier 3', 'Tier 3'],
+    ""Outlet_Type"": ['Supermarket Type1', 'Supermarket Type2', 'Supermarket Type1', 'Grocery Store', 'Supermarket Type1'],
+    ""Item_Outlet_Sales"": [3735.138, 443.4228, 2097.27, 732.38, 994.7052],
+}",What are the top 5 items with the highest visibility in Grocery Store outlets?,"```
+def process(df):
+    # Check if 'Grocery Store' outlets exist in the dataset
+    if 'Grocery Store' not in df['Outlet_Type'].unique():
+        return ""No 'Grocery Store' outlets found in the dataset.""
+
+    # Filter the dataframe for 'Grocery Store' outlets
+    grocery_store_items = df[df['Outlet_Type'] == 'Grocery Store']
+
+    # Check if there are any items in 'Grocery Store' outlets
+    if grocery_store_items.empty:
+        return ""There are no items in 'Grocery Store' outlets in the dataset.""
+
+    # Sort the filtered dataframe by 'Item_Visibility' in descending order and select the top 5
+    top_5_visible_items = grocery_store_items.sort_values(by='Item_Visibility', ascending=False).head(5)
+
+    return top_5_visible_items[['Item_Identifier', 'Item_Visibility']]
+```"
+employee,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""first_name"": [""John"", ""Jane"", ""Robert"", ""Elena"", ""Bruce""],
+    ""last_name"": [""Doe"", ""Smith"", ""Brown"", ""Taylor"", ""Lee""],
+    ""gender"": [""M"", ""F"", ""M"", ""F"", ""M""],
+    ""department"": [""Finance"", ""IT"", ""Sales"", ""Finance"", ""HR""],
+    ""salary"": [""$60,000"", ""$65,000"", ""$55,000"", ""$63,000"", ""$58,000""],
+    ""nationality"": [""USA"", ""Canada"", ""USA"", ""Mexico"", ""USA""],
+    ""joining_date"": [""jan/15/2022"", ""nov/22/2021"", ""aug/09/2020"", ""feb/28/2023"", ""jun/06/2019""],
+    ""manager_id"": [105, 105, 102, 105, None]
+}",how many employees joined between 2021-01-01 to 2021-12-31?,"```
+def process(df):
+    # Convert the 'joining_date' column to a datetime format
+    df['joining_date'] = pd.to_datetime(df['joining_date'], format='%b/%d/%Y')
+
+    # Filter the dataframe for rows where the joining date falls within the given range
+    employees_2021 = df[(df['joining_date'] >= '2021-01-01') & (df['joining_date'] <= '2021-12-31')].shape[0]
+
+    return f""{employees_2021} employees joined between January 1, 2021, and December 31, 2021.""
+```"
+employee,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""first_name"": [""John"", ""Jane"", ""Robert"", ""Elena"", ""Bruce""],
+    ""last_name"": [""Doe"", ""Smith"", ""Brown"", ""Taylor"", ""Lee""],
+    ""gender"": [""M"", ""F"", ""M"", ""F"", ""M""],
+    ""department"": [""Finance"", ""IT"", ""Sales"", ""Finance"", ""HR""],
+    ""salary"": [""$60,000"", ""$65,000"", ""$55,000"", ""$63,000"", ""$58,000""],
+    ""nationality"": [""USA"", ""Canada"", ""USA"", ""Mexico"", ""USA""],
+    ""joining_date"": [""jan/15/2022"", ""nov/22/2021"", ""aug/09/2020"", ""feb/28/2023"", ""jun/06/2019""],
+    ""manager_id"": [105, 105, 102, 105, None]
+}",Who are the top 5 employees with the highest salaries?,"```
+def process(df):
+    # Remove the dollar sign and commas, then convert the 'salary' column to a numeric type
+    df['salary'] = df['salary'].str.replace(',', '').str.replace('$', '').astype(float)
+
+    # Sort the dataframe based on the 'salary' column in descending order and take the top 5 rows
+    top_5_salaries = df.sort_values(by='salary', ascending=False).head(5)
+
+    # Extracting employee names and their salaries
+    top_employees_salary = top_5_salaries[['employee_id', 'first_name', 'last_name','salary']]
+
+    return top_employees_salary
+```"
+patient,"data = {
+    ""patient_id"": [1001, 1002, 1003, 1004, 1005],
+    ""first_name"": [""Hannah"", ""Lucas"", ""Zoe"", ""Michael"", ""Samantha""],
+    ""gender"": [""F"", ""M"", ""F"", ""M"", ""F""],
+    ""condition"": [""Diabetes"", ""Hypertension"", ""Asthma"", ""Heart Disease"", ""Epilepsy""],
+    ""last_visit"": [""sep/05/2022"", ""aug/21/2022"", ""sep/11/2022"", ""jul/19/2022"", ""oct/02/2022""],
+    ""medication"": [""Metformin"", ""Lisinopril"", ""Ventolin"", ""Aspirin"", ""Levetiracetam""],
+    ""dosage"": [""500mg"", ""10mg"", ""2 puffs"", ""75mg"", ""1,000mg""],
+    ""visit_frequency"": [""3 months"", ""6 months"", ""1 year"", ""6 months"", ""1 year""],
+    ""critical"": [""No"", ""Yes"", ""No"", ""Yes"", ""No""]
+}",Who are the top 5 patients with the most visits?,"```
+def process(df):
+    # Convert the visit_frequency to a common unit (months) to enable comparison
+    df['visit_in_months'] = df['visit_frequency'].apply(lambda x: int(x.split()[0]) if 'month' in x else int(x.split()[0]) * 12)
+
+    # Sort by visit_in_months in ascending order since lower value means higher frequency of visits
+    sorted_patients = df.sort_values(by='visit_in_months', ascending=True).head(5)
+
+    # Extract patient names and their visit frequencies
+    top_5_patients = sorted_patients[['first_name', 'visit_frequency']]
+
+    return top_5_patients
+```"
+patient,"data = {
+    ""patient_id"": [1001, 1002, 1003, 1004, 1005],
+    ""first_name"": [""Hannah"", ""Lucas"", ""Zoe"", ""Michael"", ""Samantha""],
+    ""gender"": [""F"", ""M"", ""F"", ""M"", ""F""],
+    ""condition"": [""Diabetes"", ""Hypertension"", ""Asthma"", ""Heart Disease"", ""Epilepsy""],
+    ""last_visit"": [""sep/05/2022"", ""aug/21/2022"", ""sep/11/2022"", ""jul/19/2022"", ""oct/02/2022""],
+    ""medication"": [""Metformin"", ""Lisinopril"", ""Ventolin"", ""Aspirin"", ""Levetiracetam""],
+    ""dosage"": [""500mg"", ""10mg"", ""2 puffs"", ""75mg"", ""1,000mg""],
+    ""visit_frequency"": [""3 months"", ""6 months"", ""1 year"", ""6 months"", ""1 year""],
+    ""critical"": [""No"", ""Yes"", ""No"", ""Yes"", ""No""]
+}",top 5 disease has high patients?,"```
+def process(df):
+    # Group by condition and count the number of patients for each condition
+    condition_counts = df.groupby('condition')['patient_id'].count()
+
+    # Sort in descending order and get the top 5 conditions
+    top_5_conditions = condition_counts.sort_values(ascending=False).head(5)
+
+    return top_5_conditions
+```"
+patient,"data = {
+    ""patient_id"": [1001, 1002, 1003, 1004, 1005],
+    ""first_name"": [""Hannah"", ""Lucas"", ""Zoe"", ""Michael"", ""Samantha""],
+    ""gender"": [""F"", ""M"", ""F"", ""M"", ""F""],
+    ""condition"": [""Diabetes"", ""Hypertension"", ""Asthma"", ""Heart Disease"", ""Epilepsy""],
+    ""last_visit"": [""sep/05/2022"", ""aug/21/2022"", ""sep/11/2022"", ""jul/19/2022"", ""oct/02/2022""],
+    ""medication"": [""Metformin"", ""Lisinopril"", ""Ventolin"", ""Aspirin"", ""Levetiracetam""],
+    ""dosage"": [""500mg"", ""10mg"", ""2 puffs"", ""75mg"", ""1,000mg""],
+    ""visit_frequency"": [""3 months"", ""6 months"", ""1 year"", ""6 months"", ""1 year""],
+    ""critical"": [""No"", ""Yes"", ""No"", ""Yes"", ""No""]
+}",Who are the top 5 critical patients with the most frequent visits?,"```
+def process(df):
+    # Filter for critical patients
+    critical_patients = df[df['critical'] == 'Yes']
+
+    # Function to convert visit frequency into a sortable number (smaller number means more frequent visits)
+    def parse_frequency(frequency):
+        if 'month' in frequency:
+            return int(frequency.split()[0])
+        elif 'year' in frequency:
+            return int(frequency.split()[0]) * 12
+        else:
+            return float('inf')  # for unexpected frequency format
+
+    # Apply the parsing function to the 'visit_frequency' column
+    critical_patients['visit_frequency_num'] = critical_patients['visit_frequency'].apply(parse_frequency)
+
+    # Sort by visit frequency
+    sorted_critical_patients = critical_patients.sort_values(by='visit_frequency_num')
+
+    # Select the top 5 patients
+    top_5_critical = sorted_critical_patients.head(5)
+
+    return top_5_critical[['patient_id', 'first_name', 'visit_frequency']]
+```"
+patient,"data = {
+    ""patient_id"": [1001, 1002, 1003, 1004, 1005],
+    ""first_name"": [""Hannah"", ""Lucas"", ""Zoe"", ""Michael"", ""Samantha""],
+    ""gender"": [""F"", ""M"", ""F"", ""M"", ""F""],
+    ""condition"": [""Diabetes"", ""Hypertension"", ""Asthma"", ""Heart Disease"", ""Epilepsy""],
+    ""last_visit"": [""sep/05/2022"", ""aug/21/2022"", ""sep/11/2022"", ""jul/19/2022"", ""oct/02/2022""],
+    ""medication"": [""Metformin"", ""Lisinopril"", ""Ventolin"", ""Aspirin"", ""Levetiracetam""],
+    ""dosage"": [""500mg"", ""10mg"", ""2 puffs"", ""75mg"", ""1,000mg""],
+    ""visit_frequency"": [""3 months"", ""6 months"", ""1 year"", ""6 months"", ""1 year""],
+    ""critical"": [""No"", ""Yes"", ""No"", ""Yes"", ""No""]
+}","Identify the male patients with Heart Disease who have their last visit more than 6 months ago. List them by their visit frequency, starting with the most frequent?","```
+def process(df):
+    from datetime import datetime, timedelta
+
+    # Convert 'last_visit' to datetime
+    df['last_visit'] = pd.to_datetime(df['last_visit'], format='%b/%d/%Y')
+
+    # Define the cut-off date for visits more than 6 months ago
+    six_months_ago = datetime.now() - timedelta(days=6*30)  # Approximating a month as 30 days
+
+    # Filter for male patients with 'Heart Disease' whose last visit was more than 6 months ago
+    filtered_patients = df[(df['gender'] == 'M') & (df['condition'] == 'Heart Disease') & (df['last_visit'] < six_months_ago)]
+
+    # If no patients meet the criteria, return an appropriate message
+    if filtered_patients.empty:
+        return ""No male patients with 'Heart Disease' who visited more than 6 months ago.""
+
+    # Function to convert visit frequency into a sortable number
+    def parse_frequency(frequency):
+        if 'month' in frequency:
+            return int(frequency.split()[0])
+        elif 'year' in frequency:
+            return int(frequency.split()[0]) * 12
+        else:
+            return float('inf')  # for unexpected frequency format
+
+    # Apply the parsing function to the 'visit_frequency' column
+    filtered_patients.loc[:, 'visit_frequency_num'] = filtered_patients['visit_frequency'].apply(parse_frequency)
+
+    # Sort by visit frequency
+    sorted_patients = filtered_patients.sort_values(by='visit_frequency_num')
+
+    return sorted_patients[['patient_id', 'first_name', 'last_visit', 'visit_frequency']]
+```"
+patient,"data = {
+    ""patient_id"": [1001, 1002, 1003, 1004, 1005],
+    ""first_name"": [""Hannah"", ""Lucas"", ""Zoe"", ""Michael"", ""Samantha""],
+    ""gender"": [""F"", ""M"", ""F"", ""M"", ""F""],
+    ""condition"": [""Diabetes"", ""Hypertension"", ""Asthma"", ""Heart Disease"", ""Epilepsy""],
+    ""last_visit"": [""sep/05/2022"", ""aug/21/2022"", ""sep/11/2022"", ""jul/19/2022"", ""oct/02/2022""],
+    ""medication"": [""Metformin"", ""Lisinopril"", ""Ventolin"", ""Aspirin"", ""Levetiracetam""],
+    ""dosage"": [""500mg"", ""10mg"", ""2 puffs"", ""75mg"", ""1,000mg""],
+    ""visit_frequency"": [""3 months"", ""6 months"", ""1 year"", ""6 months"", ""1 year""],
+    ""critical"": [""No"", ""Yes"", ""No"", ""Yes"", ""No""]
+}","Which patients are prescribed a dosage higher than 500mg for their medication? List them along with their medication, dosage, and condition?","```
+def process(df):
+    # Function to convert dosage into a numerical value in mg
+    def dosage_to_mg(dosage):
+        if 'mg' in dosage:
+            return int(dosage.replace('mg', '').replace(',', ''))
+        elif 'puffs' in dosage:  # Assuming puffs cannot be directly compared to mg
+            return 0
+        else:
+            return 0  # Default for unexpected dosage format
+
+    # Apply the conversion function to the 'dosage' column
+    df['dosage_mg'] = df['dosage'].apply(dosage_to_mg)
+
+    # Filter for patients with a dosage higher than 500mg
+    high_dosage_patients = df[df['dosage_mg'] > 500]
+
+    return high_dosage_patients[['patient_id', 'first_name', 'medication', 'dosage', 'condition']]
+```"
+department,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""name"": [""Alice"", ""Bob"", ""Clara"", ""David"", ""Emma""],
+    ""department"": [""IT"", ""HR"", ""Marketing"", ""Finance"", ""Sales""],
+    ""years_in_company"": [5, 3, 2, 8, 1],
+    ""last_performance_review"": [""04/15/2023"", ""06/20/2023"", ""05/30/2023"", ""03/10/2023"", ""07/22/2023""],
+    ""salary"": [70000, 45000, 50000, 85000, 40000],
+    ""work_hours_per_week"": [40, 35, 45, 50, 30],
+    ""promotion_eligibility"": [""Yes"", ""No"", ""Yes"", ""No"", ""Yes""]
+}",Who are the top 3 employees working the most hours per week eligible for promotion?,"```
+def process(df):
+    # Filter for employees eligible for promotion
+    eligible_employees = df[df['promotion_eligibility'] == 'Yes']
+
+    # Sort the filtered employees by work hours in descending order
+    top_employees = eligible_employees.sort_values(by='work_hours_per_week', ascending=False)
+
+    # Select the top 3 employees
+    top_3_employees = top_employees.head(3)
+
+    return top_3_employees[['employee_id', 'name', 'work_hours_per_week', 'promotion_eligibility']]
+```"
+department,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""name"": [""Alice"", ""Bob"", ""Clara"", ""David"", ""Emma""],
+    ""department"": [""IT"", ""HR"", ""Marketing"", ""Finance"", ""Sales""],
+    ""years_in_company"": [5, 3, 2, 8, 1],
+    ""last_performance_review"": [""04/15/2023"", ""06/20/2023"", ""05/30/2023"", ""03/10/2023"", ""07/22/2023""],
+    ""salary"": [70000, 45000, 50000, 85000, 40000],
+    ""work_hours_per_week"": [40, 35, 45, 50, 30],
+    ""promotion_eligibility"": [""Yes"", ""No"", ""Yes"", ""No"", ""Yes""]
+}",Identify the employee with the highest salary in the 'Finance' department who has been in the company for less than 5 years but has already been promoted?,"```
+def process(df):
+    # Filter for employees in the 'Finance' department who have been in the company for less than 5 years and have been promoted
+    target_employees = df[(df['department'] == 'Finance') & 
+                          (df['years_in_company'] < 5) & 
+                          (df['promotion_eligibility'] == 'Yes')]
+
+    # If no employees meet the criteria, return an appropriate message
+    if target_employees.empty:
+        return ""No employee in the 'Finance' department meets the specified criteria.""
+
+    # Identify the employee with the highest salary among the filtered group
+    top_employee = target_employees.sort_values(by='salary', ascending=False).head(1)
+
+    return top_employee[['employee_id', 'name', 'department', 'years_in_company', 'salary', 'promotion_eligibility']]
+```"
+department,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""name"": [""Alice"", ""Bob"", ""Clara"", ""David"", ""Emma""],
+    ""department"": [""IT"", ""HR"", ""Marketing"", ""Finance"", ""Sales""],
+    ""years_in_company"": [5, 3, 2, 8, 1],
+    ""last_performance_review"": [""04/15/2023"", ""06/20/2023"", ""05/30/2023"", ""03/10/2023"", ""07/22/2023""],
+    ""salary"": [70000, 45000, 50000, 85000, 40000],
+    ""work_hours_per_week"": [40, 35, 45, 50, 30],
+    ""promotion_eligibility"": [""Yes"", ""No"", ""Yes"", ""No"", ""Yes""]
+}","What is the average salary of employees working over 40 hours weekly who are not up for promotion, Additionally, list the names of these employees?","```
+def process(df):
+    # Filter for employees who work more than 40 hours per week and are not eligible for promotion
+    target_employees = df[(df['work_hours_per_week'] > 40) & (df['promotion_eligibility'] == 'No')]
+
+    # If no employees meet the criteria, return an appropriate DataFrame
+    if target_employees.empty:
+        return pd.DataFrame({""Message"": [""No employees meet the specified criteria.""]})
+
+    # Calculate the average salary of these employees
+    average_salary = target_employees['salary'].mean()
+
+    # Create a DataFrame for the results
+    results = pd.DataFrame({
+        ""Average Salary"": [average_salary],
+        ""Employee Names"": [target_employees['name'].tolist()]
+    })
+
+    return results
+```"
+department,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""name"": [""Alice"", ""Bob"", ""Clara"", ""David"", ""Emma""],
+    ""department"": [""IT"", ""HR"", ""Marketing"", ""Finance"", ""Sales""],
+    ""years_in_company"": [5, 3, 2, 8, 1],
+    ""last_performance_review"": [""04/15/2023"", ""06/20/2023"", ""05/30/2023"", ""03/10/2023"", ""07/22/2023""],
+    ""salary"": [70000, 45000, 50000, 85000, 40000],
+    ""work_hours_per_week"": [40, 35, 45, 50, 30],
+    ""promotion_eligibility"": [""Yes"", ""No"", ""Yes"", ""No"", ""Yes""]
+}",What is the department with the greatest average salary for its employees who have been with the company for 4 or more years?,"```
+def process(df):
+    # Filter for employees who have been in the company for at least 4 years
+    experienced_employees = df[df['years_in_company'] >= 4]
+
+    # If no employees meet the criteria, return an appropriate DataFrame
+    if experienced_employees.empty:
+        return pd.DataFrame({""Message"": [""No employees have been in the company for at least 4 years.""]})
+
+    # Group by department and calculate the average salary
+    avg_salary_by_dept = experienced_employees.groupby('department')['salary'].mean()
+
+    # Identify the department with the highest average salary
+    highest_avg_salary_dept = avg_salary_by_dept.idxmax()
+    highest_avg_salary = avg_salary_by_dept.max()
+
+    # Create a DataFrame for the results
+    results = pd.DataFrame({
+        ""Department"": [highest_avg_salary_dept],
+        ""Average Salary"": [highest_avg_salary]
+    })
+
+    return results
+```"
+department,"data = {
+    ""employee_id"": [101, 102, 103, 104, 105],
+    ""name"": [""Alice"", ""Bob"", ""Clara"", ""David"", ""Emma""],
+    ""department"": [""IT"", ""HR"", ""Marketing"", ""Finance"", ""Sales""],
+    ""years_in_company"": [5, 3, 2, 8, 1],
+    ""last_performance_review"": [""04/15/2023"", ""06/20/2023"", ""05/30/2023"", ""03/10/2023"", ""07/22/2023""],
+    ""salary"": [70000, 45000, 50000, 85000, 40000],
+    ""work_hours_per_week"": [40, 35, 45, 50, 30],
+    ""promotion_eligibility"": [""Yes"", ""No"", ""Yes"", ""No"", ""Yes""]
+}","What is the total salary budget for each department, and which department has the smallest number of employees?","```
+def process(df):
+    # Calculate the total salary budget for each department
+    total_salary_by_dept = df.groupby('department')['salary'].sum()
+
+    # Count the number of employees in each department
+    employee_count_by_dept = df['department'].value_counts()
+
+    # Identify the department with the smallest number of employees
+    smallest_dept = employee_count_by_dept.idxmin()
+    smallest_dept_count = employee_count_by_dept.min()
+
+    return total_salary_by_dept, f""The department with the smallest number of employees is '{smallest_dept}' with {smallest_dept_count} employees.""
+```"
+books,"data = {
+    ""book_id"": [301, 302, 303, 304, 305],
+    ""title"": [""The Mystery of Time"", ""Journey Through Stars"", ""Secrets of the Ocean"", ""The Lost Civilization"", ""Worlds Beyond""],
+    ""author"": [""Alice Johnson"", ""John Smith"", ""Emily White"", ""David Brown"", ""Sarah Green""],
+    ""genre"": [""Mystery"", ""Science Fiction"", ""Adventure"", ""Historical"", ""Fantasy""],
+    ""publication_year"": [2018, 2020, 2019, 2017, 2021],
+    ""pages"": [320, 250, 400, 500, 300],
+    ""borrowed_times"": [25, 15, 35, 20, 10],
+    ""available_copies"": [2, 3, 1, 4, 5]
+}","Which books have a borrowed times-to-available copies ratio greater than 5, and what are their genres?","```
+def process(df):
+    # Calculate the borrowed times-to-available copies ratio for each book
+    df['borrow_ratio'] = df['borrowed_times'] / df['available_copies']
+
+    # Filter for books with a borrow ratio greater than 5
+    high_demand_books = df[df['borrow_ratio'] > 5]
+
+    return high_demand_books[['book_id', 'title', 'genre', 'borrow_ratio']]
+```"
+books,"data = {
+    ""book_id"": [301, 302, 303, 304, 305],
+    ""title"": [""The Mystery of Time"", ""Journey Through Stars"", ""Secrets of the Ocean"", ""The Lost Civilization"", ""Worlds Beyond""],
+    ""author"": [""Alice Johnson"", ""John Smith"", ""Emily White"", ""David Brown"", ""Sarah Green""],
+    ""genre"": [""Mystery"", ""Science Fiction"", ""Adventure"", ""Historical"", ""Fantasy""],
+    ""publication_year"": [2018, 2020, 2019, 2017, 2021],
+    ""pages"": [320, 250, 400, 500, 300],
+    ""borrowed_times"": [25, 15, 35, 20, 10],
+    ""available_copies"": [2, 3, 1, 4, 5]
+}","Find the top 3 oldest books in terms of publication year and list their titles, authors, and genres?","```
+def process(df):
+    # Sort the DataFrame by publication year in ascending order to find the oldest books
+    oldest_books = df.sort_values(by='publication_year').head(3)
+
+    return oldest_books[['title', 'author', 'genre', 'publication_year']]
+```"
+branch,"data = {
+    ""branch_id"": [801, 802, 803, 804, 805],
+    ""branch_name"": [""Central"", ""Northside"", ""Eastview"", ""Westend"", ""Southgate""],
+    ""revenue"": [100000, 120000, 110000, 90000, 85000],
+    ""expenses"": [70000, 95000, 50000, 60000, 40000],
+    ""investment_gain_loss"": [5000, -3000, 2000, -1000, 4000]
+}",Calculate the net profit for each branch and identify the top 2 branches with the highest net profit?,"```
+def process(df):
+    # Calculate net profit for each branch
+    df['net_profit'] = df['revenue'] - df['expenses'] + df['investment_gain_loss']
+
+    # Sort the DataFrame by net profit in descending order
+    sorted_df = df.sort_values(by='net_profit', ascending=False)
+
+    # Select the top 2 branches with the highest net profit
+    top_branches = sorted_df.head(2)
+
+    return top_branches[['branch_id', 'branch_name', 'net_profit']]
+```"
+branch,"data = {
+    ""branch_id"": [801, 802, 803, 804, 805],
+    ""branch_name"": [""Central"", ""Northside"", ""Eastview"", ""Westend"", ""Southgate""],
+    ""revenue"": [100000, 120000, 110000, 90000, 85000],
+    ""expenses"": [70000, 95000, 50000, 60000, 40000],
+    ""investment_gain_loss"": [5000, -3000, 2000, -1000, 4000]
+}",Calculate the profit margin for each branch and identify the branch with the highest profit margin?,"```
+def process(df):
+    # Calculate net profit for each branch
+    df['net_profit'] = df['revenue'] - df['expenses'] + df['investment_gain_loss']
+
+    # Calculate profit margin for each branch
+    df['profit_margin'] = df['net_profit'] / df['revenue']
+
+    # Identify the branch with the highest profit margin
+    highest_margin_branch_name = df.loc[df['profit_margin'].idxmax(), 'branch_name']
+    highest_profit_margin = df['profit_margin'].max()
+
+    # Create a DataFrame for the results
+    results = pd.DataFrame({
+        ""Branch Name"": [highest_margin_branch_name],
+        ""Profit Margin"": [highest_profit_margin]
+    })
+
+    return results
+```"
+branch,"data = {
+    ""branch_id"": [801, 802, 803, 804, 805],
+    ""branch_name"": [""Central"", ""Northside"", ""Eastview"", ""Westend"", ""Southgate""],
+    ""revenue"": [100000, 120000, 110000, 90000, 85000],
+    ""expenses"": [70000, 95000, 50000, 60000, 40000],
+    ""investment_gain_loss"": [5000, -3000, 2000, -1000, 4000]
+}","Identify the branch with the lowest expenses-to-revenue ratio, and provide its name and the value of this ratio?","```
+def process(df):
+    # Calculate the expenses-to-revenue ratio for each branch
+    df['expenses_to_revenue_ratio'] = df['expenses'] / df['revenue']
+
+    # Identify the branch with the lowest ratio
+    lowest_ratio_branch = df.loc[df['expenses_to_revenue_ratio'].idxmin()]
+
+    return f""The branch with the lowest expenses to revenue ratio is '{lowest_ratio_branch['branch_name']}' with a ratio of {lowest_ratio_branch['expenses_to_revenue_ratio']:.2f}.""
+```"
+transaction,"data = {
+    ""TransactionDate"": [""2023-01-15"", ""2023-02-20"", ""2023-03-05"", ""2023-04-22"", ""2023-05-11""],
+    ""OrderID"": [""O123"", ""O124"", ""O125"", ""O126"", ""O127""],
+    ""BuyerName"": [""Emily"", ""Fiona"", ""George"", ""Henry"", ""Isla""],
+    ""ProductSKU"": [""SK101"", ""SK102"", ""SK103"", ""SK104"", ""SK105""],
+    ""ProductName"": [""Laptop"", ""Smartphone"", ""Smartwatch"", ""Tablet"", ""Camera""],
+    ""ListPrice"": [1000, 800, 200, 300, 500],
+    ""UnitsSold"": [1, 2, 1, 3, 1],
+    ""GrossRevenue"": [1000, 1600, 200, 900, 500],
+    ""SalesTax"": [100, 160, 20, 90, 50],
+    ""PaymentMode"": [""Credit Card"", ""Debit Card"", ""Cash"", ""Bank Transfer"", ""PayPal""],
+    ""ShippingDate"": [""2023-01-17"", ""2023-02-22"", ""2023-03-07"", ""2023-04-24"", ""2023-05-13""],
+    ""DeliveryStatus"": [""Delivered"", ""Pending"", ""Delivered"", ""Cancelled"", ""Delivered""],
+    ""NetRevenueAfterTax"": [900, 1440, 180, 810, 450]
+}","calculate the total gross revenue and the count of delivered orders for each payment mode, and identify the payment mode with the highest gross revenue?","```
+def process(df):
+    # Calculate total gross revenue for each payment mode
+    total_revenue_by_payment = df.groupby('PaymentMode')['GrossRevenue'].sum()
+
+    # Count the number of delivered orders for each payment mode
+    delivered_orders_by_payment = df[df['DeliveryStatus'] == 'Delivered'].groupby('PaymentMode').size()
+
+    # Identify the payment mode with the highest gross revenue
+    highest_revenue_payment_mode = total_revenue_by_payment.idxmax()
+
+    # Create a DataFrame to return results
+    results = pd.DataFrame({
+        'TotalGrossRevenue': total_revenue_by_payment,
+        'DeliveredOrdersCount': delivered_orders_by_payment
+    })
+
+    # Adding a column for the payment mode with the highest gross revenue
+    results['HighestGrossRevenuePaymentMode'] = highest_revenue_payment_mode
+
+    return results
+```"
+transaction,"data = {
+    ""TransactionDate"": [""2023-01-15"", ""2023-02-20"", ""2023-03-05"", ""2023-04-22"", ""2023-05-11""],
+    ""OrderID"": [""O123"", ""O124"", ""O125"", ""O126"", ""O127""],
+    ""BuyerName"": [""Emily"", ""Fiona"", ""George"", ""Henry"", ""Isla""],
+    ""ProductSKU"": [""SK101"", ""SK102"", ""SK103"", ""SK104"", ""SK105""],
+    ""ProductName"": [""Laptop"", ""Smartphone"", ""Smartwatch"", ""Tablet"", ""Camera""],
+    ""ListPrice"": [1000, 800, 200, 300, 500],
+    ""UnitsSold"": [1, 2, 1, 3, 1],
+    ""GrossRevenue"": [1000, 1600, 200, 900, 500],
+    ""SalesTax"": [100, 160, 20, 90, 50],
+    ""PaymentMode"": [""Credit Card"", ""Debit Card"", ""Cash"", ""Bank Transfer"", ""PayPal""],
+    ""ShippingDate"": [""2023-01-17"", ""2023-02-22"", ""2023-03-07"", ""2023-04-24"", ""2023-05-13""],
+    ""DeliveryStatus"": [""Delivered"", ""Pending"", ""Delivered"", ""Cancelled"", ""Delivered""],
+    ""NetRevenueAfterTax"": [900, 1440, 180, 810, 450]
+}","Calculate the average time taken for delivery for each product, and identify the product with the shortest average delivery time?","```
+def process(df):
+    # Convert dates to datetime objects
+    df['TransactionDate'] = pd.to_datetime(df['TransactionDate'])
+    df['ShippingDate'] = pd.to_datetime(df['ShippingDate'])
+
+    # Calculate the delivery time for each order
+    df['DeliveryTime'] = (df['ShippingDate'] - df['TransactionDate']).dt.days
+
+    # Calculate the average delivery time for each product
+    avg_delivery_time_by_product = df.groupby('ProductName')['DeliveryTime'].mean()
+
+    # Identify the product with the shortest average delivery time
+    shortest_delivery_product = avg_delivery_time_by_product.idxmin()
+
+    # Add a column for the product with the shortest delivery time
+    results = avg_delivery_time_by_product.to_frame(name='AverageDeliveryTime')
+    results['ShortestAverageDeliveryProduct'] = shortest_delivery_product
+
+    return results
+```"
+transaction,"data = {
+    ""TransactionDate"": [""2023-01-15"", ""2023-02-20"", ""2023-03-05"", ""2023-04-22"", ""2023-05-11""],
+    ""OrderID"": [""O123"", ""O124"", ""O125"", ""O126"", ""O127""],
+    ""BuyerName"": [""Emily"", ""Fiona"", ""George"", ""Henry"", ""Isla""],
+    ""ProductSKU"": [""SK101"", ""SK102"", ""SK103"", ""SK104"", ""SK105""],
+    ""ProductName"": [""Laptop"", ""Smartphone"", ""Smartwatch"", ""Tablet"", ""Camera""],
+    ""ListPrice"": [1000, 800, 200, 300, 500],
+    ""UnitsSold"": [1, 2, 1, 3, 1],
+    ""GrossRevenue"": [1000, 1600, 200, 900, 500],
+    ""SalesTax"": [100, 160, 20, 90, 50],
+    ""PaymentMode"": [""Credit Card"", ""Debit Card"", ""Cash"", ""Bank Transfer"", ""PayPal""],
+    ""ShippingDate"": [""2023-01-17"", ""2023-02-22"", ""2023-03-07"", ""2023-04-24"", ""2023-05-13""],
+    ""DeliveryStatus"": [""Delivered"", ""Pending"", ""Delivered"", ""Cancelled"", ""Delivered""],
+    ""NetRevenueAfterTax"": [900, 1440, 180, 810, 450]
+}",determine the percentage of sales tax in relation to gross revenue for each order and identify the order with the highest percentage of sales tax?,"```
+def process(df):
+    # Calculate the sales tax percentage for each order
+    df['SalesTaxPercentage'] = (df['SalesTax'] / df['GrossRevenue']) * 100
+
+    # Identify the order with the highest sales tax percentage
+    highest_tax_order = df.loc[df['SalesTaxPercentage'].idxmax()]
+
+    # Add a column for the order with the highest sales tax percentage
+    results = df[['OrderID', 'SalesTaxPercentage']]
+    results['HighestSalesTaxOrderID'] = highest_tax_order['OrderID']
+    results['HighestSalesTaxPercentage'] = highest_tax_order['SalesTaxPercentage']
+
+    return results
+```"
+transaction,"data = {
+    ""TransactionDate"": [""2023-01-15"", ""2023-02-20"", ""2023-03-05"", ""2023-04-22"", ""2023-05-11""],
+    ""OrderID"": [""O123"", ""O124"", ""O125"", ""O126"", ""O127""],
+    ""BuyerName"": [""Emily"", ""Fiona"", ""George"", ""Henry"", ""Isla""],
+    ""ProductSKU"": [""SK101"", ""SK102"", ""SK103"", ""SK104"", ""SK105""],
+    ""ProductName"": [""Laptop"", ""Smartphone"", ""Smartwatch"", ""Tablet"", ""Camera""],
+    ""ListPrice"": [1000, 800, 200, 300, 500],
+    ""UnitsSold"": [1, 2, 1, 3, 1],
+    ""GrossRevenue"": [1000, 1600, 200, 900, 500],
+    ""SalesTax"": [100, 160, 20, 90, 50],
+    ""PaymentMode"": [""Credit Card"", ""Debit Card"", ""Cash"", ""Bank Transfer"", ""PayPal""],
+    ""ShippingDate"": [""2023-01-17"", ""2023-02-22"", ""2023-03-07"", ""2023-04-24"", ""2023-05-13""],
+    ""DeliveryStatus"": [""Delivered"", ""Pending"", ""Delivered"", ""Cancelled"", ""Delivered""],
+    ""NetRevenueAfterTax"": [900, 1440, 180, 810, 450]
+}","For each Buyer Name, calculate the total units sold, total gross revenue, and the average net revenue per unit sold. Then, identify the buyer with the highest average net revenue per unit?","```
+def process(df):
+    # Group by BuyerName and calculate total units sold and total gross revenue
+    buyer_stats = df.groupby('BuyerName').agg(
+        TotalUnitsSold=pd.NamedAgg(column='UnitsSold', aggfunc='sum'),
+        TotalGrossRevenue=pd.NamedAgg(column='GrossRevenue', aggfunc='sum')
+    )
+
+    # Calculate the total net revenue for each buyer
+    buyer_total_net_revenue = df.groupby('BuyerName')['NetRevenueAfterTax'].sum()
+
+    # Calculate the average net revenue per unit sold for each buyer
+    buyer_stats['AvgNetRevenuePerUnit'] = buyer_total_net_revenue / buyer_stats['TotalUnitsSold']
+
+    # Identify the buyer with the highest average net revenue per unit
+    highest_avg_net_revenue_buyer = buyer_stats['AvgNetRevenuePerUnit'].idxmax()
+    highest_avg_net_revenue = buyer_stats['AvgNetRevenuePerUnit'].max()
+
+    # Add columns for the buyer with the highest average net revenue per unit
+    buyer_stats['HighestAvgNetRevenueBuyer'] = highest_avg_net_revenue_buyer
+    buyer_stats['HighestAvgNetRevenue'] = highest_avg_net_revenue
+
+    return buyer_stats
+```"
+city,"data = {
+    ""city_id"": [901, 902, 903, 904, 905],
+    ""city_name"": [""Greenfield"", ""Blueville"", ""Clearwater"", ""Sunnytown"", ""Starlight""],
+    ""population"": [50000, 75000, 60000, 45000, 30000],
+    ""annual_rainfall_mm"": [1200, 800, 1400, 600, 900],
+    ""green_space_sq_km"": [50, 40, 60, 30, 20],
+    ""average_temperature_celsius"": [18, 15, 20, 22, 17],
+    ""recycling_rate_percent"": [58, 65, 70, 55, 60]
+}","identify the city with the highest recycling rate percent. provide its name, recycling rate, and population?","```
+def process(df):
+    # Identify the city with the highest recycling rate percent
+    highest_recycling_rate_city = df.loc[df['recycling_rate_percent'].idxmax()]
+
+    # Return the name, recycling rate, and population of the city
+    return highest_recycling_rate_city[['city_name', 'recycling_rate_percent', 'population']]
+```"
+city,"data = {
+    ""city_id"": [901, 902, 903, 904, 905],
+    ""city_name"": [""Greenfield"", ""Blueville"", ""Clearwater"", ""Sunnytown"", ""Starlight""],
+    ""population"": [50000, 75000, 60000, 45000, 30000],
+    ""annual_rainfall_mm"": [1200, 800, 1400, 600, 900],
+    ""green_space_sq_km"": [50, 40, 60, 30, 20],
+    ""average_temperature_celsius"": [18, 15, 20, 22, 17],
+    ""recycling_rate_percent"": [58, 65, 70, 55, 60]
+}",Find the city with the highest average temperature and provide its name and average temperature?,"```
+def process(df):
+    # Identify the city with the highest average temperature
+    highest_temp_city = df.loc[df['average_temperature_celsius'].idxmax()]
+
+    # Return the name and average temperature of the city
+    return highest_temp_city[['city_name', 'average_temperature_celsius']]
+```"

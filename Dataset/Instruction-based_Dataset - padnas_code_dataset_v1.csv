@@ -1,0 +1,306 @@
+Columns,Question,ExpectedCode
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Calculate the average unit price for each item.,"```
+def process(df):
+    avg_price_per_item = df.groupby('ItemCode').agg(AverageUnitPrice=('UnitPrice', 'mean'))
+    return avg_price_per_item
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Find the total quantity sold for each item.,"```
+def process(df):
+    total_quantity_per_item = df.groupby('ItemCode').agg(TotalQuantity=('Quantity', 'sum'))
+    return total_quantity_per_item
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Identify the date with the highest sales amount.,"```
+def process(df):
+    sales_per_date = df.groupby('InvoiceDocDate').agg(DailySales=('TotalAmount', 'sum')).sort_values(by='DailySales', ascending=False)
+    return sales_per_date
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Compute the total tax collected from sales.,"```
+def process(df):
+    total_tax_collected = df['Tax'].sum()
+    return total_tax_collected
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Determine the item that has been sold to the most number of unique customers.,"```
+def process(df):
+    unique_customers_per_item = df.groupby('ItemCode').agg(UniqueCustomers=('CustomerCode', 'nunique')).sort_values(by='UniqueCustomers', ascending=False)
+    return unique_customers_per_item
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Calculate the average discount given across all sales.,"```
+def process(df):
+    avg_discount = df['Discount'].mean()
+    return avg_discount
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Find out how many items were sold on a given day.,"```
+def process(df):
+    specific_date = 'YYYY-MM-DD'
+    Items_sold_on_date = df[df['InvoiceDocDate'] == specific_date]['Quantity'].sum()
+    return specific_date
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Identify the customer who received the highest discount in total.,"```
+def process(df):
+    discount_per_customer = df.groupby('CustomerCode').agg(TotalDiscount=('Discount', 'sum')).sort_values(by='TotalDiscount', ascending=False)
+    Highest_discount_customer = discount_per_customer.head(1)
+    return discount_per_customer
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Calculate the total sales amount before applying any tax or discount.,"```
+def process(df):
+    df['SalesBeforeTaxDiscount'] = df['UnitPrice'] * df['Quantity']
+    Total_sales_before = df['SalesBeforeTaxDiscount'].sum()
+    return df['SalesBeforeTaxDiscount']
+```"
+"InvoiceDocDate, CustomerCode, CustomerName, ItemCode, ItemName, UnitPrice, Quantity, Discount, Tax, TotalAmount",Find out the most sold item in terms of quantity.,"```
+def process(df):
+    quantity_per_item = df.groupby('ItemCode').agg(TotalQuantity=('Quantity', 'sum')).sort_values(by='TotalQuantity', ascending=False)
+    Top_item_by_quantity = quantity_per_item.head(1)
+    return quantity_per_item
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Calculate the survival rate by gender.,"```
+def process(df):
+    survival_by_gender = df.groupby('Sex').agg(SurvivalRate=('Survived', 'mean'))
+    return survival_by_gender
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Identify the passenger class with the highest survival rate.,"```
+def process(df):
+    survival_by_class = df.groupby('Pclass').agg(SurvivalRate=('Survived', 'mean')).sort_values(by='SurvivalRate', ascending=False)
+    Highest_survival_class = survival_by_class.head(1)
+    return survival_by_class
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Determine the average age of passengers who survived and those who didn't.,"```
+def process(df):
+    avg_age_by_survival = df.groupby('Survived').agg(AverageAge=('Age', 'mean'))
+    return avg_age_by_survival
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Find the total fare collected for each passenger class.,"```
+def process(df):
+    fare_by_class = df.groupby('Pclass').agg(TotalFare=('Fare', 'sum'))
+    return fare_by_class
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Calculate the total number of passengers embarked from each port.,"```
+def process(df):
+    passengers_by_port = df.groupby('Embarked').size()
+    return passengers_by_port
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Find the average fare paid by passengers based on their gender.,"```
+def process(df):
+    avg_fare_by_gender = df.groupby('Sex').agg(AverageFare=('Fare', 'mean'))
+    return avg_fare_by_gender
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Identify the number of siblings/spouses passengers had onboard on average.,"```
+def process(df):
+    avg_sibsp = df['SibSp'].mean()
+    return avg_sibsp
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Determine how many passengers traveled without any parents or children.,"```
+def process(df):
+    passengers_without_parch = df[df['Parch'] == 0].shape[0]
+    return passengers_without_parch
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Identify the distribution of passengers across different ticket classes.,"```
+def process(df):
+    distribution_by_class = df.groupby('Pclass').size()
+    return distribution_by_class
+```"
+"PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked",Calculate the survival rate for passengers under the age of 18.,"```
+def process(df):
+    survival_rate_under_18 = df[df['Age'] < 18]['Survived'].mean()
+    return survival_rate_under_18
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Calculate the prevalence of heart disease by gender.,"```
+def process(df):
+    prevalence_by_gender = df.groupby('sex').agg(Prevalence=('target', 'mean'))
+    return prevalence_by_gender
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Determine the average cholesterol level for patients with and without heart disease.,"```
+def process(df):
+    avg_chol_by_disease = df.groupby('target').agg(AverageChol=('chol', 'mean'))
+    return avg_chol_by_disease
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Find out the average age of patients who have exercise-induced angina.,"```
+def process(df):
+    avg_age_with_angina = df[df['exang'] == 1]['age'].mean()
+    return avg_age_with_angina
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Determine the maximum heart rate achieved by patients with different types of chest pain.,"```
+def process(df):
+    max_heart_rate_by_cp = df.groupby('cp').agg(MaxHeartRate=('thalach', 'max'))
+    return max_heart_rate_by_cp
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Calculate the prevalence of heart disease for patients with fasting blood sugar above 120 mg/dl.,"```
+def process(df):
+    prevalence_high_fbs = df[df['fbs'] == 1]['target'].mean()
+    return prevalence_high_fbs
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Identify the number of patients with a typical angina chest pain who have heart disease.,"```
+def process(df):
+    typical_angina_disease = df[(df['cp'] == 1) & (df['target'] == 1)].shape[0]
+    return typical_angina_disease
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Determine the average resting blood pressure of females who do not have heart disease.,"```
+def process(df):
+    avg_bp_female_no_disease = df[(df['sex'] == 0) & (df['target'] == 0)]['trestbps'].mean()
+    return avg_bp_female_no_disease
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Calculate the prevalence of heart disease for patients with a reversible defect in thalassemia.,"```
+def process(df):
+    prevalence_reversible_defect = df[df['thal'] == 7]['target'].mean()
+    return prevalence_reversible_defect
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Identify the average ST depression ('oldpeak') induced by exercise for males with heart disease.,"```
+def process(df):
+    avg_oldpeak_male_disease = df[(df['sex'] == 1) & (df['target'] == 1)]['oldpeak'].mean()
+    return avg_oldpeak_male_disease
+```"
+"age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target",Find out how many patients have zero major vessels colored by fluoroscopy and still have heart disease.,"```
+def process(df):
+    zero_vessels_disease = df[(df['ca'] == 0) & (df['target'] == 1)].shape[0]
+    return zero_vessels_disease
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Determine the average age of individuals for each income bracket.,"```
+def process(df):
+    avg_age_by_income = df.groupby('income').agg(AverageAge=('age', 'mean'))
+    return avg_age_by_income
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Calculate the proportion of individuals with a bachelor's degree who earn more than $50K annually.,"```
+def process(df):
+    bachelors_high_income_ratio = (df[df['education'] == 'Bachelors']['income'] == '>50K').mean()
+    return bachelors_high_income_ratio
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Identify the most common occupation among females who earn more than $50K annually.,"```
+def process(df):
+    common_occupation = df[(df['sex'] == 'Female') & (df['income'] == '>50K')]['occupation'].mode()[0]
+    return common_occupation
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Find out the average hours worked per week for individuals who are 'Never-married' and earn more than $50K annually.,"```
+def process(df):
+    avg_hours_never_married = df[(df['marital-status'] == 'Never-married') & (df['income'] == '>50K')]['hours-per-week'].mean()
+    return avg_hours_never_married
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Determine the proportion of individuals who work in the private sector and have capital gains greater than 5000.,"```
+def process(df):
+    private_sector_high_gain_ratio = (df[df['workclass'] == 'Private']['capital-gain'] > 5000).mean()
+    return private_sector_high_gain_ratio
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Determine the total number of unique occupations in the dataset.,"```
+def process(df):
+    num_unique_occupations = df['occupation'].nunique()
+    return num_unique_occupations
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Calculate the median age of individuals whose native country is not the 'United-States'.,"```
+def process(df):
+    median_age_foreign = df[df['native-country'] != 'United-States']['age'].median()
+    return median_age_foreign
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Determine the percentage of individuals who are 'Self-emp' (self-employed) and have an income exceeding $50K.,"```
+def process(df):
+    self_emp_high_income_percentage = (len(df[(df['workclass'].str.contains('Self-emp')) & (df['income'] == '>50K')]) / len(df)) * 100
+    return self_emp_high_income_percentage
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Identify the average capital loss of individuals who work more than 40 hours per week.,"```
+def process(df):
+    avg_capital_loss_over_40hrs = df[df['hours-per-week'] > 40]['capital-loss'].mean()
+    return avg_capital_loss_over_40hrs
+```"
+"age, workclass, education, education-num, marital-status, occupation, relationship, race, sex, capital-gain, capital-loss, hours-per-week, native-country, income",Find out the most common education level among individuals whose income exceeds $50K.,"```
+def process(df):
+    common_education_high_income = df[df['income'] == '>50K']['education'].mode()[0]
+    return common_education_high_income
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Calculate the average alcohol content for each wine class.,"```
+def process(df):
+    avg_alcohol_by_class = df.groupby('Class').agg(AverageAlcohol=('Alcohol', 'mean'))
+    return avg_alcohol_by_class
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Determine the wine class with the highest average magnesium content.,"```
+def process(df):
+    class_with_highest_magnesium = df.groupby('Class').agg(AverageMagnesium=('Magnesium', 'mean')).idxmax().iloc[0]
+    return class_with_highest_magnesium
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Calculate the correlation between 'Total phenols' and 'Flavanoids'.,"```
+def process(df):
+    correlation = df['Total phenols'].corr(df['Flavanoids'])
+    return correlation
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Find out the average color intensity of wines with hue greater than 1.0.,"```
+def process(df):
+    avg_color_intensity = df[df['Hue'] > 1.0]['Color intensity'].mean()
+    return avg_color_intensity
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Determine the wine class with the lowest average 'OD280/OD315 of diluted wines'.,"```
+def process(df):
+    class_with_lowest_OD280_OD315 = df.groupby('Class').agg(AverageOD280_OD315=('OD280/OD315 of diluted wines', 'mean')).idxmin().iloc[0]
+    return class_with_lowest_OD280_OD315
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Determine the average 'Alcalinity of ash' for wines with an 'Alcohol' content above 12.5.,"```
+def process(df):
+    avg_alcalinity_high_alcohol = df[df['Alcohol'] > 12.5]['Alcalinity of ash'].mean()
+    return avg_alcalinity_high_alcohol
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Find the class of wine that has the highest average 'Proline' content.,"```
+def process(df):
+    class_with_highest_proline = df.groupby('Class').agg(AverageProline=('Proline', 'mean')).idxmax().iloc[0]
+    return class_with_highest_proline
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Calculate the correlation between 'Color intensity' and 'Hue'.,"```
+def process(df):
+    color_hue_correlation = df['Color intensity'].corr(df['Hue'])
+    return color_hue_correlation
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Identify the wine class with the lowest average 'Nonflavanoid phenols'.,"```
+def process(df):
+    class_with_lowest_nonflavanoids = df.groupby('Class').agg(AverageNonflavanoids=('Nonflavanoid phenols', 'mean')).idxmin().iloc[0]
+    return class_with_lowest_nonflavanoids
+```"
+"Alcohol, Malic acid, Ash, Alcalinity of ash, Magnesium, Total phenols, Flavanoids, Nonflavanoid phenols, Proanthocyanins, Color intensity, Hue, OD280/OD315 of diluted wines, Proline, Class",Find out the median 'Malic acid' content for wines with 'Flavanoids' below 1.5.,"```
+def process(df):
+    median_malic_low_flavanoids = df[df['Flavanoids'] < 1.5]['Malic acid'].median()
+    return median_malic_low_flavanoids
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Determine the average 'Mean radius' for benign tumors.,"```
+def process(df):
+    avg_radius_benign = df[df['Target'] == 0]['Mean radius'].mean()
+    return avg_radius_benign
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Find out the median 'Mean texture' for malignant tumors.,"```
+def process(df):
+    median_texture_malignant = df[df['Target'] == 1]['Mean texture'].median()
+    return median_texture_malignant
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Calculate the correlation between 'Mean perimeter' and 'Mean area'.,"```
+def process(df):
+    perimeter_area_correlation = df['Mean perimeter'].corr(df['Mean area'])
+    return perimeter_area_correlation
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Determine the average 'Mean smoothness' for all tumors.,"```
+def process(df):
+    avg_smoothness = df['Mean smoothness'].mean()
+    return avg_smoothness
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Find the maximum 'Mean concavity' observed for benign tumors.,"```
+def process(df):
+    max_concavity_benign = df[df['Target'] == 0]['Mean concavity'].max()
+    return max_concavity_benign
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Determine the minimum 'Mean area' for malignant tumors.,"```
+def process(df):
+    min_area_malignant = df[df['Target'] == 1]['Mean area'].min()
+    return min_area_malignant
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Calculate the correlation between 'Mean compactness' and 'Mean concave points'.,"```
+def process(df):
+    compactness_concave_points_correlation = df['Mean compactness'].corr(df['Mean concave points'])
+    return compactness_concave_points_correlation
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Identify the average 'Mean symmetry' for benign tumors.,"```
+def process(df):
+    avg_symmetry_benign = df[df['Target'] == 0]['Mean symmetry'].mean()
+    return avg_symmetry_benign
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Find out how many tumors have a 'Mean fractal dimension' above 0.07.,"```
+def process(df):
+    count_high_fractal_dimension = df[df['Mean fractal dimension'] > 0.07].shape[0]
+    return count_high_fractal_dimension
+```"
+"Mean radius, Mean texture, Mean perimeter, Mean area, Mean smoothness, Mean compactness, Mean concavity, Mean concave points, Mean symmetry, Mean fractal dimension, Target",Determine the median 'Mean smoothness' for all tumors.,"```
+def process(df):
+    median_smoothness = df['Mean smoothness'].median()
+    return median_smoothness
+```"

@@ -1,0 +1,19 @@
+Column_names_and_types,Task,Pandas_Code
+"Age:int, Name:str, Salary:float'",Calculate the sum of the Age column',df['Age'].sum()'
+"Date:datetime, Is_Employed:bool, Years_of_Experience:int'",Filter rows where the Is_Employed column is True',df[df['Is_Employed'] == True]'
+"Product_Name:str, Product_Price:float, Quantity_Sold:int'",Replace null values in the Product_Price column with 0',"df['Product_Price'].fillna(0, inplace=True)'"
+"Customer_ID:int, Purchase_Amount:float, Country:str'",Group by the Country column and calculate the mean of the Purchase_Amount column',df.groupby('Country')['Purchase_Amount'].mean()'
+"Transaction_Date:datetime, Total_Price:float, Items_Purchased:int'",Create a new column Total_Spent which is the product of Total_Price and Items_Purchased',df['Total_Spent'] = df['Total_Price'] * df['Items_Purchased']'
+"User_ID:bool, User_Rating:float, Product_ID:int'",Drop the User_Rating column',"df.drop(columns='User_Rating', inplace=True)'"
+"Invoice_Date:datetime, Sales_Revenue:float, Invoice_Number:int'",Set the Invoice_Number column as the index',"df.set_index('Invoice_Number', inplace=True)'"
+"Film_Title:str, Ticket_Price:float, Tickets_Sold:int'",Sort the DataFrame by the Tickets_Sold column in ascending order',"df.sort_values('Tickets_Sold', inplace=True)'"
+"Employee_ID:int, Department:str, Hours_Worked:float'",Calculate the total hours worked',df['Hours_Worked'].sum()'
+"Purchase_Date:datetime, Is_Returned:bool, Return_Days:int'",Filter rows where Is_Returned is True',df[df['Is_Returned'] == True]'
+"Author_Name:str, Book_Price:float, Copies_Sold:int'",Replace null values in the Book_Price column with the average',"df['Book_Price'].fillna(df['Book_Price'].mean(), inplace=True)'"
+"City:str, Population:int, Median_Income:float'",Group by the City column and calculate the median of the Median_Income column',df.groupby('City')['Median_Income'].median()'
+"Product_ID:int, Unit_Price:float, Quantity:int'",Create a new column Total_Cost which is the product of Unit_Price and Quantity',df['Total_Cost'] = df['Unit_Price'] * df['Quantity']'
+"Student_ID:int, Grade_Point_Average:float, Major:str'",Drop the Student_ID column',"df.drop(columns='Student_ID', inplace=True)'"
+"Order_Date:datetime, Order_Amount:float, Order_ID:int'",Set the Order_ID column as the index',"df.set_index('Order_ID', inplace=True)'"
+"Candidate_Name:str, Vote_Count:int, State:str'",Sort the DataFrame by the Vote_Count column in descending order',"df.sort_values('Vote_Count', ascending=False, inplace=True)'"
+"Brand:str, Sales:float, Market_Share:float'",Calculate the max sales for each brand',df.groupby('Brand')['Sales'].max()'
+"Event_Date:datetime, Attendees:int, Event_Location:str'",Filter rows where the number of Attendees is greater than 100',df[df['Attendees'] > 100]'
