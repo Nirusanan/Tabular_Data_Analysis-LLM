@@ -2,7 +2,9 @@
 Two main modules: 
 1. Supervised Fine-tune (SFT) 
 2. Direct Preference Optimization (DPO)
-
+### Model
+1. Llama-2-7b
+2. Mistral-7B
 ### Evaluation
 ![image](https://github.com/user-attachments/assets/0c4aa2af-a2e3-4619-83c3-c73eaa613c33)
 SFT: 60% accuracy
